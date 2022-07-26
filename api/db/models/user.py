@@ -14,8 +14,8 @@ class User(Base):
     hashed_password = Column(String(128), nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    petitions = relationship("Petition",
+    supported_petitions = relationship("Petition",
                              secondary=supporter_petitions,
                              back_populates="supporters")
-    own_petitions = relationship("Petition", back_populates="owner")
+    created_petitions = relationship("Petition", back_populates="owner")
     complains = relationship("Complain", back_populates="owner")

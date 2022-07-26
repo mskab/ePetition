@@ -25,7 +25,7 @@ class Petition(Base):
     status = Column(Enum(Status), default=Status.active)
     supporters = relationship("User",
                               secondary=supporter_petitions,
-                              back_populates="petitions")
+                              back_populates="supported_petitions")
     owner_id = Column(Integer, ForeignKey("user.id"), nullable=False)
-    owner = relationship("User", back_populates="own_petitions")
+    owner = relationship("User", back_populates="created_petitions")
     complains = relationship("Complain", back_populates="petition")
