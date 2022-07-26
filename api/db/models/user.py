@@ -1,0 +1,21 @@
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
+from ..base_class import Base
+from .supporter_petitions import supporter_petitions
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True, index=True)
+    firstname = Column(String)
+    lastname = Column(String)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String(128))
+    is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean, default=False)
+    petitions = relationship("Petition",
+                             secondary=supporter_petitions,
+                             back_populates="supporters")
+    own_petitions = relationship("Petition", back_populates="owner")
+    complains = relationship("Complain", back_populates="owner")
