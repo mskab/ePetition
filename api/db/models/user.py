@@ -11,9 +11,9 @@ class User(Base):
     firstname = Column(String, nullable=False)
     lastname = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
     is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)
     supported_petitions = relationship("Petition",
                              secondary=supporter_petitions,
                              back_populates="supporters")
