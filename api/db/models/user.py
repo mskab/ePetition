@@ -18,4 +18,4 @@ class User(Base):
                              secondary=supporter_petitions,
                              back_populates="supporters")
     created_petitions = relationship("Petition", back_populates="owner")
-    complains = relationship("Complain", back_populates="owner")
+    complaints = relationship("Complaint", back_populates="owner")

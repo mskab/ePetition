@@ -28,4 +28,4 @@ class Petition(Base):
                               back_populates="supported_petitions")
     owner_id = Column(Integer, ForeignKey("user.id"), nullable=False)
     owner = relationship("User", back_populates="created_petitions")
-    complains = relationship("Complain", back_populates="petition")
+    complaints = relationship("Complaint", back_populates="petition")
