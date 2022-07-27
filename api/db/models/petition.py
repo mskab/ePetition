@@ -20,7 +20,7 @@ class Petition(Base):
     description = Column(String, nullable=False)
     image = Column(String)
     decision_maker = Column(String, nullable=False)
-    location = Column(String, nullable=False)
+    country = Column(String, nullable=False)
     creation_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     status = Column(Enum(Status), default=Status.active)
     supporters = relationship("User",
