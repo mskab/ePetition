@@ -269,4 +269,5 @@ yarn-debug.log*
 yarn-error.log*
 .idea
 /htmlcov
-htmlcov
+api/migrations/versions/*
+!api/migrations/versions/__init__.py
