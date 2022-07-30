@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from schemas.user import UserCreate, UserBase
+from schemas.user import UserCreate, UserUpdate
 from db.models.user import User
 from core.hashing import Hasher
 from fastapi.encoders import jsonable_encoder
@@ -32,7 +32,7 @@ def get_all(db: Session, skip: int = 0, limit: int = 100):
     return db.query(User).offset(skip).limit(limit).all()
 
 
-def update(db: Session, user_id: int, user: UserBase):
+def update(db: Session, user_id: int, user: UserUpdate):
     db_user = get_by_id(db, user_id)
     if db_user:
         update_user_encoded = jsonable_encoder(user)

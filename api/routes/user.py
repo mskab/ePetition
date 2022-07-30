@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 from sqlalchemy.orm import Session
 from typing import List
-from schemas.user import UserCreate, UserInfo, UserBase
+from schemas.user import UserCreate, UserInfo, UserUpdate
 from db.session import get_db
 from db.repository import user as repo
 
@@ -43,7 +43,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.put('/{user_id}', response_model=UserInfo)
-def update_user(user_id: int, user: UserBase, db: Session = Depends(get_db)):
+def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     """
     Update an User stored in the database
     """
