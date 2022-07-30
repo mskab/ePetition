@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=UserInfo, status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate, db: Session = Depends(get_db)):
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     Create an User and store it in the database
     """
@@ -18,7 +18,7 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
-    return await repo.create(db, user)
+    return repo.create(db, user)
 
 
 @router.get('/', response_model=List[UserInfo])

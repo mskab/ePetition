@@ -5,7 +5,7 @@ from core.hashing import Hasher
 from fastapi.encoders import jsonable_encoder
 
 
-async def create(db: Session, user: UserCreate):
+def create(db: Session, user: UserCreate):
     db_user = User(firstname=user.firstname,
                    lastname=user.lastname,
                    email=user.email,
@@ -47,6 +47,7 @@ def update(db: Session, user_id: int, user: UserBase):
                 update_user_encoded['password'])
         db.commit()
         db.refresh(db_user)
+    
     return db_user
 
 
