@@ -9,9 +9,7 @@ def create(db: Session, user: UserCreate):
     db_user = User(firstname=user.firstname,
                    lastname=user.lastname,
                    email=user.email,
-                   password=Hasher.get_password_hash(user.password),
-                   is_active=True,
-                   is_admin=False
+                   password=Hasher.get_password_hash(user.password)
                    )
     db.add(db_user)
     db.commit()
@@ -47,7 +45,7 @@ def update(db: Session, user_id: int, user: UserUpdate):
                 update_user_encoded['password'])
         db.commit()
         db.refresh(db_user)
-    
+
     return db_user
 
 
