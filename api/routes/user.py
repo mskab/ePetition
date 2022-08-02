@@ -13,8 +13,6 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     Create an User and store it in the database
     """
-    repo.get_by_email(db, user.email)
-    
     return repo.create(db, user)
 
 

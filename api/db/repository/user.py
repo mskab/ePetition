@@ -7,6 +7,7 @@ from fastapi.encoders import jsonable_encoder
 
 
 def create(db: Session, user: UserCreate):
+    is_user_exist_by_email(db, user.email)
     db_user = User(firstname=user.firstname,
                    lastname=user.lastname,
                    email=user.email,
@@ -19,12 +20,11 @@ def create(db: Session, user: UserCreate):
     return db_user
 
 
-def get_by_email(db: Session, email: str):
+def is_user_exist_by_email(db: Session, email: str):
     db_user = db.query(User).filter(User.email == email).first()
-    if not db_user:
+    if db_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="User already exists")
-    return db_user
 
 
 def get_by_id(db: Session, user_id: int):
@@ -33,6 +33,7 @@ def get_by_id(db: Session, user_id: int):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found with the given ID")
+
     return db_user
 
 
@@ -45,10 +46,13 @@ def update(db: Session, user_id: int, user: UserUpdate):
     update_user_encoded = jsonable_encoder(user)
     if update_user_encoded['firstname']:
         db_user.firstname = update_user_encoded['firstname']
+
     if update_user_encoded['lastname']:
         db_user.lastname = update_user_encoded['lastname']
+
     if update_user_encoded['email']:
         db_user.email = update_user_encoded['email']
+
     if update_user_encoded['password']:
         db_user.password = Hasher.get_password_hash(
             update_user_encoded['password'])
