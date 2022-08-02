@@ -7,6 +7,9 @@ class UserBase(BaseModel):
     lastname: str
     email: EmailStr
 
+    class Config():
+        orm_mode = True
+
 
 class UserUpdate(BaseModel):
     firstname: Optional[str]
@@ -23,6 +26,3 @@ class UserInfo(UserBase):
     id: int
     is_active: Optional[bool]
     is_admin: Optional[bool]
-
-    class Config():
-        orm_mode = True

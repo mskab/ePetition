@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from schemas.user import UserCreate, UserInfo, UserUpdate
@@ -13,11 +13,6 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     Create an User and store it in the database
     """
-    db_user = repo.get_by_email(db, user.email)
-    if db_user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="User already exists")
-
     return repo.create(db, user)
 
 
@@ -34,12 +29,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     """
     Get the User with the given ID
     """
-    user = repo.get_by_id(db, user_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="User not found with the given ID")
-
-    return user
+    return repo.get_by_id(db, user_id)
 
 
 @router.put('/{user_id}', response_model=UserInfo)
@@ -47,11 +37,7 @@ def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     """
     Update an User stored in the database
     """
-    user = repo.update(db, user_id, user)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="User not found with the given ID")
-    return user
+    return repo.update(db, user_id, user)
 
 
 @router.delete('/{user_id}')
@@ -59,9 +45,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     """
     Delete the User with the given ID
     """
-    user = repo.delete(db, user_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="User not found with the given ID")
+    repo.delete(db, user_id)
 
     return "User deleted successfully"
