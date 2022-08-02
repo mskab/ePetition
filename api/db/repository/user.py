@@ -67,5 +67,3 @@ def delete(db: Session, user_id: int):
     user = get_by_id(db, user_id)
     db.delete(user)
     db.commit()
-
-    return user
