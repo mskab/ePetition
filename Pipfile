@@ -10,6 +10,8 @@ sqlalchemy = "*"
 python-dotenv = "*"
 psycopg2 = "*"
 alembic = "*"
+pydantic = {extras = ["email"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 
