@@ -24,27 +24,27 @@ def get_all_complaints(db: Session = Depends(get_db)):
     return repo.get_all(db)
 
 
-@router.get('/{petition_id}', response_model=ComplaintInfo)
-def get_complaint(petition_id: int, db: Session = Depends(get_db)):
+@router.get('/{complaint_id}', response_model=ComplaintInfo)
+def get_complaint(complaint_id: int, db: Session = Depends(get_db)):
     """
     Get the Complaint with the given ID
     """
-    return repo.get_by_id(db, petition_id)
+    return repo.get_by_id(db, complaint_id)
 
 
-@router.put('/{petition_id}', response_model=ComplaintInfo)
-def update_complaint(petition_id: int, petition: ComplaintUpdate, db: Session = Depends(get_db)):
+@router.put('/{complaint_id}', response_model=ComplaintInfo)
+def update_complaint(complaint_id: int, complaint: ComplaintUpdate, db: Session = Depends(get_db)):
     """
     Update a Complaint stored in the database
     """
-    return repo.update(db, petition_id, petition)
+    return repo.update(db, complaint_id, complaint)
 
 
-@router.delete('/{petition_id}')
-def delete_complaint(petition_id: int, db: Session = Depends(get_db)):
+@router.delete('/{complaint_id}')
+def delete_complaint(complaint_id: int, db: Session = Depends(get_db)):
     """
     Delete the Complaint with the given ID
     """
-    repo.delete(db, petition_id)
+    repo.delete(db, complaint_id)
 
     return "Complaint deleted successfully"
