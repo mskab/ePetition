@@ -33,23 +33,17 @@ def create(db: Session, petition: PetitionCreate):
     return db_petition
 
 
-def get_by_id(db: Session, petition_id: int):
-    db_petition = db.query(Petition).filter(Petition.id == petition_id).first()
-    if not db_petition:
+def get_by_id(db: Session, petition_id: int, petition_status=""):
+    if petition_status:
+        db_petition = db.query(Petition).filter(
+            and_(Petition.status == petition_status, Petition.id == petition_id))
+    else:
+        db_petition = db.query(Petition).filter(Petition.id == petition_id)
+    if not db_petition.count():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Petition not found with the given ID")
 
-    return db_petition
-
-
-def get_active_by_id(db: Session, petition_id: int):
-    db_petition = db.query(Petition).filter(
-        and_(Petition.status == "active", Petition.id == petition_id)).first()
-    if not db_petition:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="Petition not found with the given ID")
-
-    return db_petition
+    return db_petition.first()
 
 
 def get_all(db: Session, skip: int = 0, limit: int = 100):
@@ -98,7 +92,7 @@ def delete(db: Session, petition_id: int):
 
 
 def sign_petition(db: Session, petition_id: int, petition: PetitionSign):
-    db_petition = get_active_by_id(db, petition_id)
+    db_petition = get_by_id(db, petition_id, 'active')
     supporter = user.get_by_id(db, petition.supporter_id)
     if supporter in db_petition.supporters:
         raise HTTPException(
