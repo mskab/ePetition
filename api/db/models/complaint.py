@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from ..base_class import Base
+from sqlalchemy.dialects.postgresql import ENUM
 import enum
 
 
@@ -12,6 +13,7 @@ class Abuse(enum.Enum):
     harmful = "Harmful to children"
     violence_suicide = "Violence, suicide, or self harm"
     impersonation = "Impersonation"
+    other = "Other"
 
 
 class Status(enum.Enum):
@@ -24,9 +26,11 @@ class Complaint(Base):
     __tablename__ = "complaint"
 
     id = Column(Integer, primary_key=True, index=True)
-    abuse = Column(Enum(Abuse), nullable=False)
+    abuse = Column(ENUM(Abuse, values_callable=lambda obj: [
+                   e.value for e in obj], name='complaint_abuse'), nullable=False)
     description = Column(String)
-    status = Column(Enum(Status), default=Status.pending)
+    status = Column(ENUM(Status, name='complaint_status'),
+                    default=Status.pending.value)
     owner_id = Column(Integer, ForeignKey("user.id"), nullable=False)
     owner = relationship("User", back_populates="complaints")
     petition_id = Column(Integer, ForeignKey("petition.id"), nullable=False)
