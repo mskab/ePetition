@@ -2,14 +2,15 @@ from sqlalchemy.orm import Session
 from schemas.complaint import ComplaintCreate, ComplaintUpdate
 from db.models.complaint import Complaint
 from fastapi.encoders import jsonable_encoder
-from db.repository.user import get_by_id as is_user_exist_by_id
-from db.repository.petition import get_active_by_id as is_petition_exist_by_id
+from db.repository import user, petition
 from fastapi import status, HTTPException
 
 
 def create(db: Session, complaint: ComplaintCreate):
-    is_user_exist_by_id(db, complaint.owner_id)
-    is_petition_exist_by_id(db, complaint.petition_id)
+    # Check user and petition existence
+    user.get_by_id(db, complaint.owner_id)
+    petition.get_active_by_id(db, complaint.petition_id)
+
     db_complaint = Complaint(abuse=complaint.abuse,
                              description=complaint.description,
                              owner_id=complaint.owner_id,

@@ -6,7 +6,7 @@ from db.models.decision_maker import DecisionMaker
 from db.models.petition_decision_maker import petition_decision_maker
 from fastapi import status, HTTPException
 from fastapi.encoders import jsonable_encoder
-from .user import get_by_id as user_get_by_id
+from . import user
 
 
 def create(db: Session, petition: PetitionCreate):
@@ -99,7 +99,7 @@ def delete(db: Session, petition_id: int):
 
 def sign_petition(db: Session, petition_id: int, petition: PetitionSign):
     db_petition = get_active_by_id(db, petition_id)
-    supporter = user_get_by_id(db, petition.supporter_id)
+    supporter = user.get_by_id(db, petition.supporter_id)
     if supporter in db_petition.supporters:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="User already signed petition")
