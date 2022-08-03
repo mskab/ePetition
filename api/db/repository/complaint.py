@@ -2,25 +2,22 @@ from sqlalchemy.orm import Session
 from schemas.complaint import ComplaintCreate, ComplaintUpdate
 from db.models.complaint import Complaint
 from fastapi.encoders import jsonable_encoder
-from db.repository import user, petition
 from fastapi import status, HTTPException
 
 
 def create(db: Session, complaint: ComplaintCreate):
-    # Check user and petition existence
-    user.get_by_id(db, complaint.owner_id)
-    petition.get_active_by_id(db, complaint.petition_id)
+    try:
+        db_complaint = Complaint(abuse=complaint.abuse,
+                                description=complaint.description,
+                                owner_id=complaint.owner_id,
+                                petition_id=complaint.petition_id)
+        db.add(db_complaint)
+        db.commit()
+        db.refresh(db_complaint)
 
-    db_complaint = Complaint(abuse=complaint.abuse,
-                             description=complaint.description,
-                             owner_id=complaint.owner_id,
-                             petition_id=complaint.petition_id)
-    db.add(db_complaint)
-    db.commit()
-    db.refresh(db_complaint)
-
-    return db_complaint
-
+        return db_complaint
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def get_by_id(db: Session, complaint_id: int):
     db_complaint = db.query(Complaint).filter(
