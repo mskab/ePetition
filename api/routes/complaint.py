@@ -17,11 +17,11 @@ def create_complaint(req_complaint: ComplaintCreate, db: Session = Depends(get_d
 
 
 @router.get('/', response_model=List[ComplaintInfo])
-def get_all_complaints(db: Session = Depends(get_db)):
+def get_all_complaints(offset: int, limit: int, db: Session = Depends(get_db)):
     """
     Get all the Complaints stored in database
     """
-    return complaint.get_all(db)
+    return complaint.get_all(db, offset, limit)
 
 
 @router.get('/{complaint_id}', response_model=ComplaintInfo)

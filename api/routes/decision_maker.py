@@ -17,11 +17,11 @@ def create_decision_maker(req_decision_maker: DecisionMakerCreate, db: Session =
 
 
 @router.get('/', response_model=List[DecisionMakerInfo])
-def get_all_decision_makers(db: Session = Depends(get_db)):
+def get_all_decision_makers(offset: int, limit: int, db: Session = Depends(get_db)):
     """
     Get all the Decision makers stored in database
     """
-    return decision_maker.get_all(db)
+    return decision_maker.get_all(db, offset, limit)
 
 
 @router.get('/{decision_maker_id}', response_model=DecisionMakerInfo)

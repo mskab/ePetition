@@ -17,11 +17,11 @@ def create_petition(req_petition: PetitionCreate, db: Session = Depends(get_db))
 
 
 @router.get('/', response_model=List[PetitionInfo])
-def get_all_petitions(db: Session = Depends(get_db)):
+def get_all_petitions(offset: int, limit: int, db: Session = Depends(get_db)):
     """
     Get all the Petitions stored in database
     """
-    return petition.get_all(db)
+    return petition.get_all(db, offset, limit)
 
 
 @router.get('/{petition_id}', response_model=PetitionInfo)

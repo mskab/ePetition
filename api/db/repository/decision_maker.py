@@ -34,8 +34,8 @@ def get_by_id(db: Session, decision_maker_id: int):
     return decision_maker
 
 
-def get_all(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(DecisionMaker).offset(skip).limit(limit).all()
+def get_all(db: Session, offset: int = 0, limit: int = 100):
+    return db.query(DecisionMaker).offset(offset).limit(limit).all()
 
 
 def update(db: Session, decision_maker_id: int, decision_maker: DecisionMakerUpdate):

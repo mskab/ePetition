@@ -17,11 +17,11 @@ def create_user(req_user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get('/', response_model=List[UserInfo])
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(offset: int, limit: int, db: Session = Depends(get_db)):
     """
     Get all the Users stored in database
     """
-    return user.get_all(db)
+    return user.get_all(db, offset, limit)
 
 
 @router.get('/{user_id}', response_model=UserInfo)

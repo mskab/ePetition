@@ -46,8 +46,8 @@ def get_by_id(db: Session, petition_id: int, petition_status=""):
     return db_petition.first()
 
 
-def get_all(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Petition).offset(skip).limit(limit).all()
+def get_all(db: Session, offeset: int = 0, limit: int = 100):
+    return db.query(Petition).offset(offeset).limit(limit).all()
 
 
 def update(db: Session, petition_id: int, petition: PetitionUpdate):

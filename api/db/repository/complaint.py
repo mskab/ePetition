@@ -30,8 +30,8 @@ def get_by_id(db: Session, complaint_id: int):
     return db_complaint
 
 
-def get_all(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Complaint).offset(skip).limit(limit).all()
+def get_all(db: Session, offset: int = 0, limit: int = 100):
+    return db.query(Complaint).offset(offset).limit(limit).all()
 
 
 def update(db: Session, complaint_id: int, complaint: ComplaintUpdate):
