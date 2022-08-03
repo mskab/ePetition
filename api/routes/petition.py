@@ -9,11 +9,11 @@ router = APIRouter()
 
 
 @router.post("/", response_model=PetitionInfo, status_code=status.HTTP_201_CREATED)
-def create_petition(petition: PetitionCreate, db: Session = Depends(get_db)):
+def create_petition(req_petition: PetitionCreate, db: Session = Depends(get_db)):
     """
     Create a Petition and store it in the database
     """
-    return petition.create(db, petition)
+    return petition.create(db, req_petition)
 
 
 @router.get('/', response_model=List[PetitionInfo])
@@ -33,11 +33,11 @@ def get_petition(petition_id: int, db: Session = Depends(get_db)):
 
 
 @router.put('/{petition_id}', response_model=PetitionInfo)
-def update_petition(petition_id: int, petition: PetitionUpdate, db: Session = Depends(get_db)):
+def update_petition(petition_id: int, req_petition: PetitionUpdate, db: Session = Depends(get_db)):
     """
     Update a Petition stored in the database
     """
-    return petition.update(db, petition_id, petition)
+    return petition.update(db, petition_id, req_petition)
 
 
 @router.delete('/{petition_id}')
@@ -51,8 +51,8 @@ def delete_petition(petition_id: int, db: Session = Depends(get_db)):
 
 
 @router.post('/{petition_id}/sign', response_model=PetitionInfo)
-def sign_petition(petition_id: int, petition: PetitionSign, db: Session = Depends(get_db)):
+def sign_petition(petition_id: int, req_petition: PetitionSign, db: Session = Depends(get_db)):
     """
     Sing a Petition stored in the database
     """
-    return petition.sign_petition(db, petition_id, petition)
+    return petition.sign_petition(db, petition_id, req_petition)
