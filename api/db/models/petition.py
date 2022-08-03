@@ -1,13 +1,14 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, CheckConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, CheckConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 from ..base_class import Base
 from .supporter_petitions import supporter_petitions
 from .petition_decision_maker import petition_decision_maker
+from datetime import datetime
+from sqlalchemy.dialects.postgresql import ENUM
 import enum
 
 
-class Status(enum.Enum):
+class Status(str, enum.Enum):
     active = "active"
     closed = "closed"
     pending = "pending"
@@ -25,12 +26,11 @@ class Petition(Base):
     description = Column(String, nullable=False)
     image = Column(String)
     country = Column(String)
-    creation_time = Column(DateTime(timezone=True),
-                           server_default=func.now(), nullable=False)
-    due_date = Column(DateTime(timezone=True),
-                      server_default=func.now())
+    creation_date = Column(Date, default=datetime.now().date())
+    due_date = Column(Date)
     signed_goal = Column(Integer, nullable=False)
-    status = Column(Enum(Status), default=Status.pending)
+    status = Column(ENUM(Status, name='petition_status'),
+                    default=Status.pending.value)
     supporters = relationship("User",
                               secondary=supporter_petitions,
                               back_populates="supported_petitions")
@@ -38,5 +38,5 @@ class Petition(Base):
     owner = relationship("User", back_populates="created_petitions")
     complaints = relationship("Complaint", back_populates="petition")
     decision_makers = relationship("DecisionMaker",
-                             secondary=petition_decision_maker,
-                             back_populates="petitions")
+                                   secondary=petition_decision_maker,
+                                   back_populates="petitions")
