@@ -12,6 +12,8 @@ class DecisionMaker(Base):
     affiliation = Column(String)
     email = Column(String, unique=True, index=True, nullable=False)
     is_verified = Column(Boolean, default=False)
-    petitions = relationship("Petition",
-                             secondary=petition_decision_maker,
-                             back_populates="decision_makers")
+    petitions = relationship(
+        "Petition",
+        secondary=petition_decision_maker,
+        back_populates="decision_makers",
+    )

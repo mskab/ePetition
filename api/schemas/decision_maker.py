@@ -18,5 +18,5 @@ class DecisionMakerInfo(DecisionMakerCreate):
     id: int
     is_verified: Optional[bool]
 
-    class Config():
+    class Config:
         orm_mode = True

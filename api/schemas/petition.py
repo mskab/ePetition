@@ -16,7 +16,7 @@ class PetitionUpdate(BaseModel):
     decision_makers: Optional[List[int]]
     status: Optional[Status]
 
-    class Config():
+    class Config:
         use_enum_values = True
 
 
@@ -42,6 +42,6 @@ class PetitionInfo(PetitionBase):
     decision_makers: List[DecisionMakerInfo]
     supporters: List[UserBase]
 
-    class Config():
+    class Config:
         orm_mode = True
         use_enum_values = True

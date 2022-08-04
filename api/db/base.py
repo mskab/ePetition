@@ -1,5 +1,5 @@
-from .base_class import Base
-from .models.user import User
-from .models.petition import Petition
-from .models.complaint import Complaint
-from .models.decision_maker import DecisionMaker
+from .base_class import Base  # NOQA
+from .models.user import User  # NOQA
+from .models.petition import Petition  # NOQA
+from .models.complaint import Complaint  # NOQA
+from .models.decision_maker import DecisionMaker  # NOQA

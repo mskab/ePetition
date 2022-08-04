@@ -14,8 +14,8 @@ class User(Base):
     password = Column(String(128), nullable=False)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
-    supported_petitions = relationship("Petition",
-                             secondary=supporter_petitions,
-                             back_populates="supporters")
+    supported_petitions = relationship(
+        "Petition", secondary=supporter_petitions, back_populates="supporters"
+    )
     created_petitions = relationship("Petition", back_populates="owner")
     complaints = relationship("Complaint", back_populates="owner")
