@@ -37,8 +37,8 @@ def get_by_id(db: Session, user_id: int):
     return db_user
 
 
-def get_all(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(User).offset(skip).limit(limit).all()
+def get_all(db: Session, offset: int = 0, limit: int = 100):
+    return db.query(User).offset(offset).limit(limit).all()
 
 
 def update(db: Session, user_id: int, user: UserUpdate):
