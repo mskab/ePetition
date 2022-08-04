@@ -12,6 +12,9 @@ psycopg2 = "*"
 alembic = "*"
 pydantic = {extras = ["email"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
+pre-commit = "*"
+flake8-fastapi = "*"
+black = "*"
 
 [dev-packages]
 
