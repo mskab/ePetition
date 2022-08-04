@@ -1,5 +1,7 @@
-from .base_class import Base  # NOQA
-from .models.user import User  # NOQA
-from .models.petition import Petition  # NOQA
-from .models.complaint import Complaint  # NOQA
-from .models.decision_maker import DecisionMaker  # NOQA
+# pylint: skip-file
+
+from db.base_class import Base  # NOQA
+from db.models.complaint import Complaint  # NOQA
+from db.models.decision_maker import DecisionMaker  # NOQA
+from db.models.petition import Petition  # NOQA
+from db.models.user import User  # NOQA

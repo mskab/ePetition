@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+# pylint: skip-file
+
 from core.config import settings
-from db.session import engine
 from db.base import Base
+from db.session import engine
+from fastapi import FastAPI
 from routes.base import api_router
 
 

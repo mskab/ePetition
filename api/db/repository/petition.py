@@ -1,15 +1,19 @@
+from db.models.decision_maker import DecisionMaker
+from db.models.petition import Petition
+from db.models.petition_decision_maker import petition_decision_maker
+from db.repository import user
+from fastapi import HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from schemas.petition import (
+    PetitionCreate,
+    PetitionSign,
+    PetitionUpdate,
+)
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
-from schemas.petition import PetitionCreate, PetitionUpdate, PetitionSign
-from db.models.petition import Petition
-from db.models.decision_maker import DecisionMaker
-from db.models.petition_decision_maker import petition_decision_maker
-from fastapi import status, HTTPException
-from fastapi.encoders import jsonable_encoder
-from . import user
 
 
-def create(db: Session, petition: PetitionCreate):
+def create(_db: Session, petition: PetitionCreate):
     db_petition = Petition(
         title=petition.title,
         description=petition.description,
@@ -19,7 +23,7 @@ def create(db: Session, petition: PetitionCreate):
         signed_goal=petition.signed_goal,
         owner_id=petition.owner_id,
     )
-    decision_makers = db.query(DecisionMaker).filter(
+    decision_makers = _db.query(DecisionMaker).filter(
         DecisionMaker.id.in_(petition.decision_makers)
     )
     if decision_makers.count() == len(petition.decision_makers):
@@ -30,22 +34,25 @@ def create(db: Session, petition: PetitionCreate):
             detail="Decision maker not found",
         )
 
-    db.add(db_petition)
-    db.commit()
-    db.refresh(db_petition)
+    _db.add(db_petition)
+    _db.commit()
+    _db.refresh(db_petition)
 
     return db_petition
 
 
-def get_by_id(db: Session, petition_id: int, petition_status=""):
+def get_by_id(_db: Session, petition_id: int, petition_status=""):
     if petition_status:
-        db_petition = db.query(Petition).filter(
+        db_petition = _db.query(Petition).filter(
             and_(
-                Petition.status == petition_status, Petition.id == petition_id
+                Petition.status == petition_status,
+                Petition.id == petition_id,
             )
         )
     else:
-        db_petition = db.query(Petition).filter(Petition.id == petition_id)
+        db_petition = _db.query(Petition).filter(
+            Petition.id == petition_id
+        )
     if not db_petition.count():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -55,12 +62,12 @@ def get_by_id(db: Session, petition_id: int, petition_status=""):
     return db_petition.first()
 
 
-def get_all(db: Session, offeset: int = 0, limit: int = 100):
-    return db.query(Petition).offset(offeset).limit(limit).all()
+def get_all(_db: Session, offeset: int = 0, limit: int = 100):
+    return _db.query(Petition).offset(offeset).limit(limit).all()
 
 
-def update(db: Session, petition_id: int, petition: PetitionUpdate):
-    db_petition = get_by_id(db, petition_id)
+def update(_db: Session, petition_id: int, petition: PetitionUpdate):
+    db_petition = get_by_id(_db, petition_id)
     update_petition_encode = jsonable_encoder(petition)
     if update_petition_encode["due_date"]:
         db_petition.due_date = update_petition_encode["due_date"]
@@ -72,19 +79,24 @@ def update(db: Session, petition_id: int, petition: PetitionUpdate):
         db_petition.status = update_petition_encode["status"]
 
     if update_petition_encode["decision_makers"]:
-        decision_makers = db.query(DecisionMaker).filter(
+        decision_makers = _db.query(DecisionMaker).filter(
             DecisionMaker.id.in_(petition.decision_makers)
         )
         if decision_makers.count() == len(petition.decision_makers):
-            removed_decision_makers = petition_decision_maker.delete().where(
-                petition_decision_maker.c.decision_maker_id.not_in(
-                    petition.decision_makers
+            removed_decision_makers = (
+                petition_decision_maker.delete().where(
+                    petition_decision_maker.c.decision_maker_id.not_in(
+                        petition.decision_makers
+                    )
+                    & (
+                        petition_decision_maker.c.petition_id
+                        == db_petition.id
+                    )
                 )
-                & (petition_decision_maker.c.petition_id == db_petition.id)
             )
 
-            db.execute(removed_decision_makers)
-            db.commit()
+            _db.execute(removed_decision_makers)
+            _db.commit()
 
             db_petition.decision_makers.extend(decision_makers)
         else:
@@ -93,21 +105,23 @@ def update(db: Session, petition_id: int, petition: PetitionUpdate):
                 detail="Decision maker not found",
             )
 
-    db.commit()
-    db.refresh(db_petition)
+    _db.commit()
+    _db.refresh(db_petition)
 
     return db_petition
 
 
-def delete(db: Session, petition_id: int):
-    petition = get_by_id(db, petition_id)
-    db.delete(petition)
-    db.commit()
+def delete(_db: Session, petition_id: int):
+    petition = get_by_id(_db, petition_id)
+    _db.delete(petition)
+    _db.commit()
 
 
-def sign_petition(db: Session, petition_id: int, petition: PetitionSign):
-    db_petition = get_by_id(db, petition_id, "active")
-    supporter = user.get_by_id(db, petition.supporter_id)
+def sign_petition(
+    _db: Session, petition_id: int, petition: PetitionSign
+):
+    db_petition = get_by_id(_db, petition_id, "active")
+    supporter = user.get_by_id(_db, petition.supporter_id)
     if supporter in db_petition.supporters:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -115,7 +129,7 @@ def sign_petition(db: Session, petition_id: int, petition: PetitionSign):
         )
 
     db_petition.supporters.append(supporter)
-    db.commit()
-    db.refresh(db_petition)
+    _db.commit()
+    _db.refresh(db_petition)
 
     return db_petition

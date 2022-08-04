@@ -1,9 +1,10 @@
-from typing import Optional, List
-from pydantic import BaseModel
 from datetime import date
-from .decision_maker import DecisionMakerInfo
-from .user import UserBase
+from typing import List, Optional
+
 from db.models.petition import Status
+from pydantic import BaseModel
+from schemas.decision_maker import DecisionMakerInfo
+from schemas.user import UserBase
 
 
 class PetitionSign(BaseModel):

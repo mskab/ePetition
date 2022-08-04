@@ -1,21 +1,24 @@
-from fastapi import APIRouter, status, Depends
-from sqlalchemy.orm import Session
 from typing import List
+
+from db.repository import petition
+from db.session import get_db
+from fastapi import APIRouter, Depends, status
 from schemas.petition import (
     PetitionCreate,
     PetitionInfo,
-    PetitionUpdate,
     PetitionSign,
+    PetitionUpdate,
 )
-from db.session import get_db
-from db.repository import petition
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 default_session = Depends(get_db)
 
 
 @router.post(
-    "/", response_model=PetitionInfo, status_code=status.HTTP_201_CREATED
+    "/",
+    response_model=PetitionInfo,
+    status_code=status.HTTP_201_CREATED,
 )
 def create_petition(
     req_petition: PetitionCreate, db: Session = default_session
@@ -27,7 +30,9 @@ def create_petition(
 
 
 @router.get("/", response_model=List[PetitionInfo])
-def get_all_petitions(offset: int, limit: int, db: Session = default_session):
+def get_all_petitions(
+    offset: int, limit: int, db: Session = default_session
+):
     """
     Get all the Petitions stored in database
     """
@@ -66,7 +71,9 @@ def delete_petition(petition_id: int, db: Session = default_session):
 
 @router.post("/{petition_id}/sign", response_model=PetitionInfo)
 def sign_petition(
-    petition_id: int, req_petition: PetitionSign, db: Session = default_session
+    petition_id: int,
+    req_petition: PetitionSign,
+    db: Session = default_session,
 ):
     """
     Sing a Petition stored in the database

@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from typing import Optional
+
 from db.models.complaint import Abuse, Status
+from pydantic import BaseModel
 
 
 class ComplaintUpdate(BaseModel):

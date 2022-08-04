@@ -1,11 +1,11 @@
-from sqlalchemy.orm import Session
-from schemas.complaint import ComplaintCreate, ComplaintUpdate
 from db.models.complaint import Complaint
+from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from fastapi import status, HTTPException
+from schemas.complaint import ComplaintCreate, ComplaintUpdate
+from sqlalchemy.orm import Session
 
 
-def create(db: Session, complaint: ComplaintCreate):
+def create(_db: Session, complaint: ComplaintCreate):
     try:
         db_complaint = Complaint(
             abuse=complaint.abuse,
@@ -13,18 +13,22 @@ def create(db: Session, complaint: ComplaintCreate):
             owner_id=complaint.owner_id,
             petition_id=complaint.petition_id,
         )
-        db.add(db_complaint)
-        db.commit()
-        db.refresh(db_complaint)
+        _db.add(db_complaint)
+        _db.commit()
+        _db.refresh(db_complaint)
 
         return db_complaint
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        ) from exc
 
 
-def get_by_id(db: Session, complaint_id: int):
+def get_by_id(_db: Session, complaint_id: int):
     db_complaint = (
-        db.query(Complaint).filter(Complaint.id == complaint_id).first()
+        _db.query(Complaint)
+        .filter(Complaint.id == complaint_id)
+        .first()
     )
     if not db_complaint:
         raise HTTPException(
@@ -35,23 +39,23 @@ def get_by_id(db: Session, complaint_id: int):
     return db_complaint
 
 
-def get_all(db: Session, offset: int = 0, limit: int = 100):
-    return db.query(Complaint).offset(offset).limit(limit).all()
+def get_all(_db: Session, offset: int = 0, limit: int = 100):
+    return _db.query(Complaint).offset(offset).limit(limit).all()
 
 
-def update(db: Session, complaint_id: int, complaint: ComplaintUpdate):
-    db_complaint = get_by_id(db, complaint_id)
+def update(_db: Session, complaint_id: int, complaint: ComplaintUpdate):
+    db_complaint = get_by_id(_db, complaint_id)
     update_complaint_encode = jsonable_encoder(complaint)
     if update_complaint_encode["status"]:
         db_complaint.status = update_complaint_encode["status"]
 
-    db.commit()
-    db.refresh(db_complaint)
+    _db.commit()
+    _db.refresh(db_complaint)
 
     return db_complaint
 
 
-def delete(db: Session, complaint_id: int):
-    complaint = get_by_id(db, complaint_id)
-    db.delete(complaint)
-    db.commit()
+def delete(_db: Session, complaint_id: int):
+    complaint = get_by_id(_db, complaint_id)
+    _db.delete(complaint)
+    _db.commit()

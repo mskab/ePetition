@@ -1,18 +1,19 @@
+import enum
+from datetime import datetime
+
+from db.base_class import Base
+from db.models.petition_decision_maker import petition_decision_maker
+from db.models.supporter_petitions import supporter_petitions
 from sqlalchemy import (
+    CheckConstraint,
     Column,
+    Date,
+    ForeignKey,
     Integer,
     String,
-    ForeignKey,
-    Date,
-    CheckConstraint,
 )
-from sqlalchemy.orm import relationship
-from ..base_class import Base
-from .supporter_petitions import supporter_petitions
-from .petition_decision_maker import petition_decision_maker
-from datetime import datetime
 from sqlalchemy.dialects.postgresql import ENUM
-import enum
+from sqlalchemy.orm import relationship
 
 
 class Status(str, enum.Enum):
@@ -35,7 +36,8 @@ class Petition(Base):
     due_date = Column(Date)
     signed_goal = Column(Integer, nullable=False)
     status = Column(
-        ENUM(Status, name="petition_status"), default=Status.pending.value
+        ENUM(Status, name="petition_status"),
+        default=Status.pending.value,
     )
     supporters = relationship(
         "User",

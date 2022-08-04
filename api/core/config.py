@@ -1,7 +1,8 @@
 import os
 import urllib
-from dotenv import load_dotenv
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 env_path = Path("../") / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -23,14 +24,8 @@ class Settings:
         str(os.environ.get("POSTGRES_PASSWORD"))
     )
     SSL_MODE = urllib.parse.quote_plus(str(os.environ.get("SSL_MODE")))
-    DATABASE_URL = "postgresql://{}:{}@{}:{}/{}?sslmode={}".format(
-        POSTGRES_USER,
-        POSTGRES_PASSWORD,
-        POSTGRES_SERVER,
-        POSTGRES_PORT,
-        POSTGRES_DB,
-        SSL_MODE,
-    )
+    DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@ \
+        {POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}?sslmode={SSL_MODE}"
 
 
 settings = Settings()

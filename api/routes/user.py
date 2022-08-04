@@ -1,15 +1,18 @@
-from fastapi import APIRouter, status, Depends
-from sqlalchemy.orm import Session
 from typing import List
-from schemas.user import UserCreate, UserInfo, UserUpdate
-from db.session import get_db
+
 from db.repository import user
+from db.session import get_db
+from fastapi import APIRouter, Depends, status
+from schemas.user import UserCreate, UserInfo, UserUpdate
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 default_session = Depends(get_db)
 
 
-@router.post("/", response_model=UserInfo, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/", response_model=UserInfo, status_code=status.HTTP_201_CREATED
+)
 def create_user(req_user: UserCreate, db: Session = default_session):
     """
     Create an User and store it in the database
@@ -18,7 +21,9 @@ def create_user(req_user: UserCreate, db: Session = default_session):
 
 
 @router.get("/", response_model=List[UserInfo])
-def get_all_users(offset: int, limit: int, db: Session = default_session):
+def get_all_users(
+    offset: int, limit: int, db: Session = default_session
+):
     """
     Get all the Users stored in database
     """

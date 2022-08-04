@@ -1,6 +1,5 @@
-from sqlalchemy import Table, Column, ForeignKey
-from ..base_class import Base
-
+from db.base_class import Base
+from sqlalchemy import Column, ForeignKey, Table
 
 supporter_petitions = Table(
     "supporter_petitions",

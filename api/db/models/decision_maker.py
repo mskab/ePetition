@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from db.base_class import Base
+from db.models.petition_decision_maker import petition_decision_maker
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
-from ..base_class import Base
-from .petition_decision_maker import petition_decision_maker
 
 
 class DecisionMaker(Base):
