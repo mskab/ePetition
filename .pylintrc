@@ -1,0 +1,4 @@
+[MASTER]
+init-hook='from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.join(os.path.dirname(find_pylintrc()), "api"));'
+disable=C0114, C0115, C0116, R0903, C0103
+extension-pkg-whitelist=pydantic
