@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from db.base_class import Base
+from db.models.supporter_petitions import supporter_petitions
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
-from ..base_class import Base
-from .supporter_petitions import supporter_petitions
 
 
 class User(Base):
@@ -14,8 +14,10 @@ class User(Base):
     password = Column(String(128), nullable=False)
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
-    supported_petitions = relationship("Petition",
-                             secondary=supporter_petitions,
-                             back_populates="supporters")
+    supported_petitions = relationship(
+        "Petition",
+        secondary=supporter_petitions,
+        back_populates="supporters",
+    )
     created_petitions = relationship("Petition", back_populates="owner")
     complaints = relationship("Complaint", back_populates="owner")

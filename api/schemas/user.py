@@ -1,4 +1,5 @@
 from typing import Optional
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -7,7 +8,7 @@ class UserBase(BaseModel):
     lastname: str
     email: EmailStr
 
-    class Config():
+    class Config:
         orm_mode = True
 
 

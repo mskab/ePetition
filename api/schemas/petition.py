@@ -1,9 +1,10 @@
-from typing import Optional, List
-from pydantic import BaseModel
 from datetime import date
-from .decision_maker import DecisionMakerInfo
-from .user import UserBase
+from typing import List, Optional
+
 from db.models.petition import Status
+from pydantic import BaseModel
+from schemas.decision_maker import DecisionMakerInfo
+from schemas.user import UserBase
 
 
 class PetitionSign(BaseModel):
@@ -16,7 +17,7 @@ class PetitionUpdate(BaseModel):
     decision_makers: Optional[List[int]]
     status: Optional[Status]
 
-    class Config():
+    class Config:
         use_enum_values = True
 
 
@@ -42,6 +43,6 @@ class PetitionInfo(PetitionBase):
     decision_makers: List[DecisionMakerInfo]
     supporters: List[UserBase]
 
-    class Config():
+    class Config:
         orm_mode = True
         use_enum_values = True

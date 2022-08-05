@@ -1,12 +1,13 @@
-from pydantic import BaseModel
 from typing import Optional
+
 from db.models.complaint import Abuse, Status
+from pydantic import BaseModel
 
 
 class ComplaintUpdate(BaseModel):
     status: Status
 
-    class Config():
+    class Config:
         use_enum_values = True
 
 
@@ -16,7 +17,7 @@ class ComplaintCreate(BaseModel):
     owner_id: int
     petition_id: int
 
-    class Config():
+    class Config:
         use_enum_values = True
 
 
@@ -24,5 +25,5 @@ class ComplaintInfo(ComplaintCreate):
     id: int
     status: Status
 
-    class Config():
+    class Config:
         orm_mode = True

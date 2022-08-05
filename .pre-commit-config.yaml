@@ -1,0 +1,41 @@
+repos:
+- repo: https://github.com/python/black
+  rev: 22.1.0
+  hooks:
+    - id: black
+      language_version: python
+      exclude: ^(.*\b(migrations)\b.*|.*\b(env/)\b.*)$
+      additional_dependencies: ['click==8.0.4']
+      args: [--line-length=72]
+
+- repo: https://github.com/pycqa/flake8
+  rev: 4.0.1
+  hooks:
+    - id: flake8
+      exclude: ^(.*\b(migrations)\b.*|.*\b(env/)\b.*)$
+      additional_dependencies:
+        - flake8-bugbear
+        - flake8-comprehensions
+        - flake8-simplify
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.10.1
+  hooks:
+    - id: isort
+      args: ["--profile", "black", --line-length=72]
+      name: isort (python)
+      exclude: ^(.*\b(migrations)\b.*|.*\b(env/)\b.*)$
+
+- repo: local
+  hooks:
+    - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+      args:
+        [
+          "-rn",
+          "-sn",
+        ]
+      exclude: ^(.*\b(migrations)\b.*|.*\b(env/)\b.*)$

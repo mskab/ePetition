@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+# pylint: skip-file
+
 from core.config import settings
-from db.session import engine
 from db.base import Base
+from db.session import engine
+from fastapi import FastAPI
 from routes.base import api_router
 
 
@@ -14,8 +16,9 @@ def create_tables():
 
 
 def start_application():
-    app = FastAPI(title=settings.PROJECT_NAME,
-                  version=settings.PROJECT_VERSION)
+    app = FastAPI(
+        title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION
+    )
     include_router(app)
     create_tables()
     return app
