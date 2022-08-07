@@ -17,6 +17,8 @@ flake8-fastapi = "*"
 black = "*"
 isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 pylint = "*"
+fastapi-jwt-auth = "*"
+python-multipart = "*"
 
 [dev-packages]
 

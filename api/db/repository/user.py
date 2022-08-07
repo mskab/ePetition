@@ -21,8 +21,12 @@ def create(_db: Session, user: UserCreate):
     return db_user
 
 
+def get_by_email(_db: Session, email: str):
+    return _db.query(User).filter(User.email == email).first()
+
+
 def is_user_exist_by_email(_db: Session, email: str):
-    db_user = _db.query(User).filter(User.email == email).first()
+    db_user = get_by_email(_db, email)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
