@@ -7,6 +7,7 @@ class DecisionMakerUpdate(BaseModel):
     naming: Optional[str]
     affiliation: Optional[str]
     email: Optional[EmailStr]
+    is_verified: Optional[bool]
 
 
 class DecisionMakerCreate(BaseModel):
@@ -17,7 +18,7 @@ class DecisionMakerCreate(BaseModel):
 
 class DecisionMakerInfo(DecisionMakerCreate):
     id: int
-    is_verified: Optional[bool]
+    is_verified: bool
 
     class Config:
         orm_mode = True

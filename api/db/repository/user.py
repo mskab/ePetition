@@ -2,7 +2,7 @@ from core.hashing import Hasher
 from db.models.user import User
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.user import UserCreate, UserUpdate
+from schemas.user import UserCreate, UserUpdateAllAllowedFields
 from sqlalchemy.orm import Session
 
 
@@ -49,7 +49,9 @@ def get_all(_db: Session, offset: int = 0, limit: int = 100):
     return _db.query(User).offset(offset).limit(limit).all()
 
 
-def update(_db: Session, user_id: int, user: UserUpdate):
+def update(
+    _db: Session, user_id: int, user: UserUpdateAllAllowedFields
+):
     db_user = get_by_id(_db, user_id)
     update_user_encoded = jsonable_encoder(user)
     if update_user_encoded["firstname"]:
@@ -65,6 +67,11 @@ def update(_db: Session, user_id: int, user: UserUpdate):
         db_user.password = Hasher.get_password_hash(
             update_user_encoded["password"]
         )
+
+    if "is_active" in update_user_encoded and isinstance(
+        update_user_encoded["is_active"], bool
+    ):
+        db_user.is_active = update_user_encoded["is_active"]
 
     _db.commit()
     _db.refresh(db_user)

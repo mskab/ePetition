@@ -12,11 +12,15 @@ class UserBase(BaseModel):
         orm_mode = True
 
 
-class UserUpdate(BaseModel):
+class UserUpdate(UserBase):
     firstname: Optional[str]
     lastname: Optional[str]
     email: Optional[EmailStr]
     password: Optional[str]
+
+
+class UserUpdateAllAllowedFields(UserUpdate):
+    is_active: Optional[bool]
 
 
 class UserCreate(UserBase):
@@ -25,5 +29,8 @@ class UserCreate(UserBase):
 
 class UserInfo(UserBase):
     id: int
-    is_active: Optional[bool]
-    is_admin: Optional[bool]
+
+
+class UserInfoAllAllowedFields(UserInfo):
+    is_active: bool
+    is_admin: bool

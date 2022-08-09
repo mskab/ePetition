@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from core.config import settings
+from pydantic import BaseModel
 
 
 class TokenConfig(BaseModel):

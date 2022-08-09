@@ -1,8 +1,9 @@
 from typing import List
 
-from db.repository import decision_maker
+from db.repository import auth, decision_maker
 from db.session import get_db
 from fastapi import APIRouter, Depends, status
+from fastapi_jwt_auth import AuthJWT
 from schemas.decision_maker import (
     DecisionMakerCreate,
     DecisionMakerInfo,
@@ -12,6 +13,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 default_session = Depends(get_db)
+default_authJWT = Depends()
 
 
 @router.post(
@@ -22,10 +24,13 @@ default_session = Depends(get_db)
 def create_decision_maker(
     req_decision_maker: DecisionMakerCreate,
     db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
     Create a Decision maker and store it in the database
     """
+    Auth.jwt_required()
+
     return decision_maker.create(db, req_decision_maker)
 
 
@@ -54,10 +59,13 @@ def update_decision_maker(
     decision_maker_id: int,
     req_decision_maker: DecisionMakerUpdate,
     db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
     Update a Decision maker stored in the database
     """
+    auth.is_only_admin_permitted(db, Auth)
+
     return decision_maker.update(
         db, decision_maker_id, req_decision_maker
     )
@@ -65,11 +73,14 @@ def update_decision_maker(
 
 @router.delete("/{decision_maker_id}")
 def delete_decision_maker(
-    decision_maker_id: int, db: Session = default_session
+    decision_maker_id: int,
+    db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
     Delete the Decision maker with the given ID
     """
+    auth.is_only_admin_permitted(db, Auth)
     decision_maker.delete(db, decision_maker_id)
 
     return "Decision maker deleted successfully"
