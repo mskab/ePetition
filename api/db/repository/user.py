@@ -68,9 +68,7 @@ def update(
             update_user_encoded["password"]
         )
 
-    if "is_active" in update_user_encoded and isinstance(
-        update_user_encoded["is_active"], bool
-    ):
+    if update_user_encoded.get("is_active") is not None:
         db_user.is_active = update_user_encoded["is_active"]
 
     _db.commit()
