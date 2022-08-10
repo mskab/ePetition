@@ -4,6 +4,7 @@ from db.repository import auth, complaint
 from db.session import get_db
 from fastapi import APIRouter, Depends, status
 from fastapi_jwt_auth import AuthJWT
+from schemas.common import StatusResponse
 from schemas.complaint import (
     ComplaintCreate,
     ComplaintInfo,
@@ -78,7 +79,7 @@ def update_complaint(
     return complaint.update(db, complaint_id, req_complaint)
 
 
-@router.delete("/{complaint_id}")
+@router.delete("/{complaint_id}", response_model=StatusResponse)
 def delete_complaint(
     complaint_id: int,
     db: Session = default_session,
@@ -90,4 +91,7 @@ def delete_complaint(
     auth.is_only_admin_permitted(db, Auth)
     complaint.delete(db, complaint_id)
 
-    return "Complaint deleted successfully"
+    return {
+        "success": True,
+        "message": "Complaint deleted successfully",
+    }

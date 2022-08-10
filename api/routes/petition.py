@@ -4,6 +4,7 @@ from db.repository import auth, petition
 from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
+from schemas.common import StatusResponse
 from schemas.petition import (
     PetitionCreate,
     PetitionInfo,
@@ -76,7 +77,7 @@ def update_petition(
     return petition.update(db, petition_id, req_petition)
 
 
-@router.delete("/{petition_id}")
+@router.delete("/{petition_id}", response_model=StatusResponse)
 def delete_petition(
     petition_id: int,
     db: Session = default_session,
@@ -88,7 +89,7 @@ def delete_petition(
     auth.is_only_admin_permitted(db, Auth)
     petition.delete(db, petition_id)
 
-    return "Petition deleted successfully"
+    return {"success": True, "message": "Petition deleted successfully"}
 
 
 @router.post("/{petition_id}/sign", response_model=PetitionInfo)

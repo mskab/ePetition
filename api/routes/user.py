@@ -4,6 +4,7 @@ from db.repository import auth, user
 from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
+from schemas.common import StatusResponse
 from schemas.user import (
     UserCreate,
     UserInfo,
@@ -95,7 +96,7 @@ def update_user(
     return UserInfo(**updated_user.__dict__)
 
 
-@router.delete("/{user_id}")
+@router.delete("/{user_id}", response_model=StatusResponse)
 def delete_user(
     user_id: int,
     db: Session = default_session,
@@ -107,4 +108,4 @@ def delete_user(
     auth.is_only_admin_permitted(db, Auth)
     user.delete(db, user_id)
 
-    return "User deleted successfully"
+    return {"success": True, "message": "User deleted successfully"}

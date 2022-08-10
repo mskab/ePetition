@@ -4,6 +4,7 @@ from db.repository import auth, decision_maker
 from db.session import get_db
 from fastapi import APIRouter, Depends, status
 from fastapi_jwt_auth import AuthJWT
+from schemas.common import StatusResponse
 from schemas.decision_maker import (
     DecisionMakerCreate,
     DecisionMakerInfo,
@@ -71,7 +72,7 @@ def update_decision_maker(
     )
 
 
-@router.delete("/{decision_maker_id}")
+@router.delete("/{decision_maker_id}", response_model=StatusResponse)
 def delete_decision_maker(
     decision_maker_id: int,
     db: Session = default_session,
@@ -83,4 +84,7 @@ def delete_decision_maker(
     auth.is_only_admin_permitted(db, Auth)
     decision_maker.delete(db, decision_maker_id)
 
-    return "Decision maker deleted successfully"
+    return {
+        "success": True,
+        "message": "Decision maker deleted successfully",
+    }
