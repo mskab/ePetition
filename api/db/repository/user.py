@@ -70,6 +70,9 @@ def update(
 
     if update_user_encoded.get("is_active") is not None:
         db_user.is_active = update_user_encoded["is_active"]
+    
+    if update_user_encoded.get("is_admin") == True:
+        db_user.is_admin = update_user_encoded["is_admin"]
 
     _db.commit()
     _db.refresh(db_user)

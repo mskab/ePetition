@@ -21,6 +21,7 @@ class UserUpdate(UserBase):
 
 class UserUpdateAllAllowedFields(UserUpdate):
     is_active: Optional[bool]
+    is_admin: Optional[bool]
 
 
 class UserCreate(UserBase):
