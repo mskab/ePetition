@@ -59,17 +59,24 @@ def update(
     decision_maker: DecisionMakerUpdate,
 ):
     db_decision_maker = get_by_id(_db, decision_maker_id)
-    update_user_encoded = jsonable_encoder(decision_maker)
-    if update_user_encoded["naming"]:
-        db_decision_maker.naming = update_user_encoded["naming"]
+    update_decision_maker_encoded = jsonable_encoder(decision_maker)
+    if update_decision_maker_encoded["naming"]:
+        db_decision_maker.naming = update_decision_maker_encoded[
+            "naming"
+        ]
 
-    if update_user_encoded["affiliation"]:
-        db_decision_maker.affiliation = update_user_encoded[
+    if update_decision_maker_encoded["affiliation"]:
+        db_decision_maker.affiliation = update_decision_maker_encoded[
             "affiliation"
         ]
 
-    if update_user_encoded["email"]:
-        db_decision_maker.email = update_user_encoded["email"]
+    if update_decision_maker_encoded["email"]:
+        db_decision_maker.email = update_decision_maker_encoded["email"]
+
+    if update_decision_maker_encoded["is_active"] is not None:
+        db_decision_maker.is_verified = update_decision_maker_encoded[
+            "is_verified"
+        ]
 
     _db.commit()
     _db.refresh(db_decision_maker)

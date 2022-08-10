@@ -1,8 +1,10 @@
 from typing import List
 
-from db.repository import petition
+from db.repository import auth, petition
 from db.session import get_db
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_jwt_auth import AuthJWT
+from schemas.common import StatusResponse
 from schemas.petition import (
     PetitionCreate,
     PetitionInfo,
@@ -13,6 +15,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 default_session = Depends(get_db)
+default_authJWT = Depends()
 
 
 @router.post(
@@ -21,11 +24,15 @@ default_session = Depends(get_db)
     status_code=status.HTTP_201_CREATED,
 )
 def create_petition(
-    req_petition: PetitionCreate, db: Session = default_session
+    req_petition: PetitionCreate,
+    db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
     Create a Petition and store it in the database
     """
+    auth.is_only_user_permitted(db, Auth)
+
     return petition.create(db, req_petition)
 
 
@@ -52,21 +59,37 @@ def update_petition(
     petition_id: int,
     req_petition: PetitionUpdate,
     db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
     Update a Petition stored in the database
     """
+    current_user = auth.get_authenteficated_user(db, Auth)
+    if not current_user.is_admin and req_petition.status not in [
+        "victory",
+        "closed",
+    ]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Update status not allowed",
+        )
+
     return petition.update(db, petition_id, req_petition)
 
 
-@router.delete("/{petition_id}")
-def delete_petition(petition_id: int, db: Session = default_session):
+@router.delete("/{petition_id}", response_model=StatusResponse)
+def delete_petition(
+    petition_id: int,
+    db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
+):
     """
     Delete the Petition with the given ID
     """
+    auth.is_only_admin_permitted(db, Auth)
     petition.delete(db, petition_id)
 
-    return "Petition deleted successfully"
+    return {"success": True, "message": "Petition deleted successfully"}
 
 
 @router.post("/{petition_id}/sign", response_model=PetitionInfo)
@@ -74,8 +97,11 @@ def sign_petition(
     petition_id: int,
     req_petition: PetitionSign,
     db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
 ):
     """
-    Sing a Petition stored in the database
+    Sign a Petition stored in the database
     """
+    auth.is_only_user_permitted(db, Auth)
+
     return petition.sign_petition(db, petition_id, req_petition)

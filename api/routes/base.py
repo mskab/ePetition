@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from routes import complaint, decision_maker, petition, user
+from routes import auth, complaint, decision_maker, petition, user
 
 api_router = APIRouter()
 api_router.include_router(user.router, prefix="/users", tags=["users"])
@@ -14,3 +14,4 @@ api_router.include_router(
 api_router.include_router(
     complaint.router, prefix="/complaints", tags=["complaints"]
 )
+api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
