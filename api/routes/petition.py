@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Optional
 
 from db.repository import auth, petition
 from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import StatusResponse
+from schemas.common import ResponseModificators, StatusResponse
 from schemas.petition import (
     PetitionCreate,
     PetitionInfo,
@@ -38,12 +38,37 @@ def create_petition(
 
 @router.get("/", response_model=List[PetitionInfo])
 def get_all_petitions(
-    offset: int, limit: int, db: Session = default_session
+    req: Optional[ResponseModificators], db: Session = default_session
 ):
     """
     Get all the Petitions stored in database
     """
-    return petition.get_all(db, offset, limit)
+    return petition.get_all(
+        db,
+        req.pagination.offset,
+        req.pagination.limit,
+        filtering=req.filtering,
+        ordering=req.ordering,
+    )
+
+
+@router.get("/search", response_model=List[PetitionInfo])
+def search_petitions(
+    db: Session = default_session,
+    q: str = "",
+    req: Optional[ResponseModificators] = None,
+):
+    """
+    Search petitions by requested query
+    """
+    return petition.get_all(
+        db,
+        req.pagination.offset,
+        req.pagination.limit,
+        q,
+        req.filtering,
+        req.ordering,
+    )
 
 
 @router.get("/{petition_id}", response_model=PetitionInfo)
@@ -65,6 +90,7 @@ def update_petition(
     Update a Petition stored in the database
     """
     current_user = auth.get_authenteficated_user(db, Auth)
+
     if not current_user.is_admin and req_petition.status not in [
         "victory",
         "closed",
@@ -73,8 +99,7 @@ def update_petition(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Update status not allowed",
         )
-
-    return petition.update(db, petition_id, req_petition)
+    return petition.update(db, petition_id, req_petition, current_user)
 
 
 @router.delete("/{petition_id}", response_model=StatusResponse)

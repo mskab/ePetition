@@ -1,16 +1,30 @@
+from typing import List
+
 from db.models.decision_maker import DecisionMaker
 from db.models.petition import Petition
 from db.models.petition_decision_maker import petition_decision_maker
+from db.models.user import User
 from db.repository import user
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
+from schemas.common import (
+    DEFAULT_DATE,
+    FilteringRequest,
+    OrderingRequest,
+)
 from schemas.petition import (
     PetitionCreate,
     PetitionSign,
     PetitionUpdate,
 )
-from sqlalchemy import and_
+from sqlalchemy import and_, asc, desc, func
 from sqlalchemy.orm import Session
+
+ALLOWED_ORDER_FIELDS = ["supporters", "creation_date", "due_date"]
+
+ALLOWED_ORDERS = ["asc", "desc"]
+
+ALLOWED_FILTERS = ["creation_date", "due_date", "status"]
 
 
 def create(_db: Session, petition: PetitionCreate):
@@ -62,12 +76,90 @@ def get_by_id(_db: Session, petition_id: int, petition_status=""):
     return db_petition.first()
 
 
-def get_all(_db: Session, offeset: int = 0, limit: int = 100):
-    return _db.query(Petition).offset(offeset).limit(limit).all()
+def get_all(
+    _db: Session,
+    offeset: int = 0,
+    limit: int = 100,
+    search_query: str = "",
+    filtering: FilteringRequest = None,
+    ordering: List[OrderingRequest] = None,
+):
+    query = _db.query(Petition).filter(
+        Petition.title.contains(search_query)
+    )
+    if filtering:
+        for key, value in filtering:
+            if value and key in ALLOWED_FILTERS:
+                if key == "status":
+                    query = query.filter(Petition.status.in_(value))
+                else:
+                    query = query.filter(
+                        and_(
+                            value.start != DEFAULT_DATE,
+                            getattr(Petition, key) >= value.start,
+                        )
+                    ).filter(
+                        and_(
+                            value.end != DEFAULT_DATE,
+                            getattr(Petition, key) <= value.end,
+                        )
+                    )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Can not apply such filtering",
+                )
+
+    if ordering:
+        for order in ordering:
+            if (
+                order.by in ALLOWED_ORDER_FIELDS
+                and order.order in ALLOWED_ORDERS
+            ):
+                if order.by == "supporters":
+                    query = query.join(Petition.supporters).group_by(
+                        Petition.id
+                    )
+                    if order.order == "asc":
+                        query = query.order_by(
+                            asc(func.count(Petition.id))
+                        )
+                    else:
+                        query = query.order_by(
+                            desc(func.count(Petition.id))
+                        )
+                else:
+                    if order.order == "asc":
+                        query = query.order_by(
+                            asc(func.count(getattr(Petition, order.by)))
+                        )
+                    else:
+                        query = query.order_by(
+                            desc(
+                                func.count(getattr(Petition, order.by))
+                            )
+                        )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Can not apply such ordering",
+                )
+
+    return query.offset(offeset).limit(limit).all()
 
 
-def update(_db: Session, petition_id: int, petition: PetitionUpdate):
+def update(
+    _db: Session,
+    petition_id: int,
+    petition: PetitionUpdate,
+    current_user: User,
+):
     db_petition = get_by_id(_db, petition_id)
+    if (
+        not current_user.is_admin
+        and db_petition.owner_id != current_user.id
+    ):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     update_petition_encode = jsonable_encoder(petition)
     if update_petition_encode["due_date"]:
         db_petition.due_date = update_petition_encode["due_date"]
