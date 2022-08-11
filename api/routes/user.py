@@ -57,7 +57,7 @@ def search_user(
     q: str = "",
 ):
     """
-    Search decision makers by requested query
+    Search Users by requested query
     """
     auth.is_only_admin_permitted(db, Auth)
 
