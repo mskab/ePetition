@@ -16,7 +16,7 @@ from schemas.petition import (
     PetitionSign,
     PetitionUpdate,
 )
-from sqlalchemy import and_, asc, desc, func
+from sqlalchemy import and_, text
 from sqlalchemy.orm import Session
 
 ALLOWED_ORDER_FIELDS = ["supporters", "creation_date", "due_date"]
@@ -108,6 +108,7 @@ def get_all(
                 )
 
     if ordering:
+        prepare_ordering = []
         for order in ordering:
             if (
                 order.by in ALLOWED_ORDER_FIELDS
@@ -117,31 +118,23 @@ def get_all(
                     query = query.join(Petition.supporters).group_by(
                         Petition.id
                     )
+                    prepare_ordering.append("count(petition.id)")
                     if order.order == "asc":
-                        query = query.order_by(
-                            asc(func.count(Petition.id))
-                        )
+                        prepare_ordering[-1] += " asc"
                     else:
-                        query = query.order_by(
-                            desc(func.count(Petition.id))
-                        )
+                        prepare_ordering[-1] += " desc"
                 else:
+                    prepare_ordering.append(f"{order.by}")
                     if order.order == "asc":
-                        query = query.order_by(
-                            asc(func.count(getattr(Petition, order.by)))
-                        )
+                        prepare_ordering[-1] += " asc"
                     else:
-                        query = query.order_by(
-                            desc(
-                                func.count(getattr(Petition, order.by))
-                            )
-                        )
+                        prepare_ordering[-1] += " desc"
             else:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail="Can not apply such ordering",
                 )
-
+            query = query.order_by(text(", ".join(prepare_ordering)))
     return query.offset(offeset).limit(limit).all()
 
 
