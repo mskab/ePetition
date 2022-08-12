@@ -61,9 +61,9 @@ def get_all(
 ):
     query = _db.query(User).filter(
         or_(
-            User.firstname.contains(search_query),
-            User.lastname.contains(search_query),
-            User.email.contains(search_query),
+            User.firstname.contains(search_query, autoescape=True),
+            User.lastname.contains(search_query, autoescape=True),
+            User.email.contains(search_query, autoescape=True),
         )
     )
 

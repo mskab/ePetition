@@ -85,7 +85,7 @@ def get_all(
     ordering: List[OrderingRequest] = None,
 ):
     query = _db.query(Petition).filter(
-        Petition.title.contains(search_query)
+        Petition.title.contains(search_query, autoescape=True)
     )
     if filtering:
         for key, value in filtering:

@@ -57,7 +57,7 @@ def get_all(
 ):
     return (
         _db.query(DecisionMaker)
-        .filter(DecisionMaker.naming.contains(search_query))
+        .filter(DecisionMaker.naming.contains(search_query, autoescape=True))
         .offset(offset)
         .limit(limit)
         .all()
