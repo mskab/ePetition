@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
 from schemas.common import StatusResponse
 from schemas.user import (
-    ResponseModificators,
     UserCreate,
     UserInfo,
     UserInfoAllAllowedFields,
@@ -32,42 +31,38 @@ def create_user(req_user: UserCreate, db: Session = default_session):
 
 @router.get("/", response_model=List[UserInfoAllAllowedFields])
 def get_all_users(
-    req: ResponseModificators,
     db: Session = default_session,
     Auth: AuthJWT = default_authJWT,
+    offset: int = 0,
+    limit: int = 100,
+    q: str = "",
+    is_active: bool = None,
+    is_admin: bool = None,
 ):
     """
     Get all the Users stored in database
     """
     auth.is_only_admin_permitted(db, Auth)
 
-    return user.get_all(
-        db,
-        req.pagination.offset,
-        req.pagination.limit,
-        filtering=req.filtering,
-    )
+    return user.get_all(db, offset, limit, q, is_active, is_admin)
 
 
 @router.get("/search", response_model=List[UserInfoAllAllowedFields])
 def search_user(
-    req: ResponseModificators,
     db: Session = default_session,
     Auth: AuthJWT = default_authJWT,
+    offset: int = 0,
+    limit: int = 100,
     q: str = "",
+    is_active: bool = None,
+    is_admin: bool = None,
 ):
     """
     Search Users by requested query
     """
     auth.is_only_admin_permitted(db, Auth)
 
-    return user.get_all(
-        db,
-        req.pagination.offset,
-        req.pagination.limit,
-        q,
-        req.filtering,
-    )
+    return user.get_all(db, offset, limit, q, is_active, is_admin)
 
 
 @router.get(

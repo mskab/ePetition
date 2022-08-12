@@ -1,7 +1,6 @@
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
-from schemas.common import PaginationRequest
 
 
 class UserBase(BaseModel):
@@ -41,8 +40,3 @@ class UserInfoAllAllowedFields(UserInfo):
 class UserFilters(BaseModel):
     is_active: Optional[bool]
     is_admin: Optional[bool]
-
-
-class ResponseModificators(BaseModel):
-    pagination: PaginationRequest
-    filtering: Optional[UserFilters]

@@ -1,10 +1,10 @@
-from typing import List, Optional
+from typing import List
 
 from db.repository import auth, petition
 from db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import ResponseModificators, StatusResponse
+from schemas.common import StatusResponse
 from schemas.petition import (
     PetitionCreate,
     PetitionInfo,
@@ -38,36 +38,69 @@ def create_petition(
 
 @router.get("/", response_model=List[PetitionInfo])
 def get_all_petitions(
-    req: Optional[ResponseModificators], db: Session = default_session
+    db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
+    ordering: str = None,
+    statuses: str = None,
+    creation_date: str = None,
+    due_date: str = None,
 ):
     """
     Get all the Petitions stored in database
     """
+    if ordering:
+        ordering = ordering.split(",")
+
+    if statuses:
+        statuses = statuses.split(",")
+
+    if creation_date:
+        creation_date = creation_date.split(",")
+
+    if due_date:
+        due_date = due_date.split(",")
+
     return petition.get_all(
-        db,
-        req.pagination.offset,
-        req.pagination.limit,
-        filtering=req.filtering,
-        ordering=req.ordering,
+        db, offset, limit, statuses, creation_date, due_date, ordering
     )
 
 
 @router.get("/search", response_model=List[PetitionInfo])
 def search_petitions(
     db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
     q: str = "",
-    req: Optional[ResponseModificators] = None,
+    ordering: str = None,
+    statuses: str = None,
+    creation_date: str = None,
+    due_date: str = None,
 ):
     """
     Search petitions by requested query
     """
+    if ordering:
+        ordering = ordering.split(",")
+
+    if statuses:
+        statuses = statuses.split(",")
+
+    if creation_date:
+        creation_date = creation_date.split(",")
+
+    if due_date:
+        due_date = due_date.split(",")
+
     return petition.get_all(
         db,
-        req.pagination.offset,
-        req.pagination.limit,
+        offset,
+        limit,
+        statuses,
+        creation_date,
+        due_date,
+        ordering,
         q,
-        req.filtering,
-        req.ordering,
     )
 
 

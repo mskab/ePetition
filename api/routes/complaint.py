@@ -4,7 +4,7 @@ from db.repository import auth, complaint
 from db.session import get_db
 from fastapi import APIRouter, Depends, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import ResponseModificators, StatusResponse
+from schemas.common import StatusResponse
 from schemas.complaint import (
     ComplaintCreate,
     ComplaintInfo,
@@ -37,18 +37,20 @@ def create_complaint(
 
 @router.get("/", response_model=List[ComplaintInfo])
 def get_all_complaints(
-    req: ResponseModificators,
     db: Session = default_session,
     Auth: AuthJWT = default_authJWT,
+    limit: int = 100,
+    offset: int = 0,
+    statuses: str = None,
 ):
     """
     Get all the Complaints stored in database
     """
     auth.is_only_admin_permitted(db, Auth)
+    if statuses:
+        statuses = statuses.split(",")
 
-    return complaint.get_all(
-        db, req.pagination.offset, req.pagination.limit, req.filtering
-    )
+    return complaint.get_all(db, offset, limit, statuses)
 
 
 @router.get("/{complaint_id}", response_model=ComplaintInfo)

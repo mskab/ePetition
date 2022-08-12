@@ -2,15 +2,9 @@ from core.hashing import Hasher
 from db.models.user import User
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.user import (
-    UserCreate,
-    UserFilters,
-    UserUpdateAllAllowedFields,
-)
+from schemas.user import UserCreate, UserUpdateAllAllowedFields
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-
-ALLOWED_FILTERS = ["is_active", "is_admin"]
 
 
 def create(_db: Session, user: UserCreate):
@@ -57,7 +51,8 @@ def get_all(
     offset: int = 0,
     limit: int = 100,
     search_query: str = "",
-    filtering: UserFilters = None,
+    is_active: bool = None,
+    is_admin: bool = None,
 ):
     query = _db.query(User).filter(
         or_(
@@ -66,16 +61,11 @@ def get_all(
             User.email.contains(search_query, autoescape=True),
         )
     )
+    if is_active is not None:
+        query = query.filter(User.is_active == is_active)
 
-    if filtering:
-        for key, value in filtering:
-            if value is not None and key in ALLOWED_FILTERS:
-                query = query.filter(getattr(User, key) == value)
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Can not apply such filtering",
-                )
+    if is_admin is not None:
+        query = query.filter(User.is_admin == is_admin)
 
     return query.offset(offset).limit(limit).all()
 

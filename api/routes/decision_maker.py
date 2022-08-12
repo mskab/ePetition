@@ -4,7 +4,7 @@ from db.repository import auth, decision_maker
 from db.session import get_db
 from fastapi import APIRouter, Depends, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import PaginationRequest, StatusResponse
+from schemas.common import StatusResponse
 from schemas.decision_maker import (
     DecisionMakerCreate,
     DecisionMakerInfo,
@@ -37,20 +37,19 @@ def create_decision_maker(
 
 @router.get("/", response_model=List[DecisionMakerInfo])
 def get_all_decision_makers(
-    req_pagination: PaginationRequest, db: Session = default_session
+    db: Session = default_session, limit: int = 100, offset: int = 0
 ):
     """
     Get all the Decision makers stored in database
     """
-    return decision_maker.get_all(
-        db, req_pagination.offset, req_pagination.limit
-    )
+    return decision_maker.get_all(db, offset, limit)
 
 
 @router.get("/search", response_model=List[DecisionMakerInfo])
 def search_decision_maker(
-    req_pagination: PaginationRequest,
     db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
     q: str = "",
 ):
     """
@@ -58,8 +57,8 @@ def search_decision_maker(
     """
     return decision_maker.get_all(
         db,
-        req_pagination.offset,
-        req_pagination.limit,
+        offset,
+        limit,
         q,
     )
 

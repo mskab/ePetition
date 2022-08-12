@@ -1,11 +1,10 @@
-from db.models.complaint import Complaint
+from typing import List
+
+from db.models.complaint import Complaint, Status
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.common import FilteringRequest
 from schemas.complaint import ComplaintCreate, ComplaintUpdate
 from sqlalchemy.orm import Session
-
-ALLOWED_FILTERS = ["status"]
 
 
 def create(_db: Session, complaint: ComplaintCreate):
@@ -46,18 +45,17 @@ def get_all(
     _db: Session,
     offset: int = 0,
     limit: int = 100,
-    filtering: FilteringRequest = None,
+    statuses: List[str] = None,
 ):
     query = _db.query(Complaint)
-    if filtering:
-        for key, value in filtering:
-            if value and key in ALLOWED_FILTERS:
-                query = query.filter(Complaint.status.in_(value))
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Can not apply such filtering",
-                )
+    if statuses:
+        if set(statuses) <= {i.value for i in Status}:
+            query = query.filter(Complaint.status.in_(statuses))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Can not apply such filtering",
+            )
 
     return query.offset(offset).limit(limit).all()
 
