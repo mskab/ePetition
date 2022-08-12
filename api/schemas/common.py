@@ -3,8 +3,6 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-DEFAULT_DATE = Date(1, 1, 1)
-
 
 class StatusResponse(BaseModel):
     success: bool
@@ -17,8 +15,8 @@ class PaginationRequest(BaseModel):
 
 
 class FilteringDateRequest(BaseModel):
-    start: Optional[Date] = DEFAULT_DATE
-    end: Optional[Date] = DEFAULT_DATE
+    start: Optional[Date]
+    end: Optional[Date]
 
 
 class FilteringRequest(BaseModel):

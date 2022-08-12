@@ -8,7 +8,6 @@ from db.repository import user
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from schemas.common import (
-    DEFAULT_DATE,
     FilteringRequest,
     OrderingRequest,
 )
@@ -89,21 +88,19 @@ def get_all(
     )
     if filtering:
         for key, value in filtering:
-            if value and key in ALLOWED_FILTERS:
-                if key == "status":
-                    query = query.filter(Petition.status.in_(value))
-                else:
-                    query = query.filter(
-                        and_(
-                            value.start != DEFAULT_DATE,
-                            getattr(Petition, key) >= value.start,
-                        )
-                    ).filter(
-                        and_(
-                            value.end != DEFAULT_DATE,
-                            getattr(Petition, key) <= value.end,
-                        )
-                    )
+            if key in ALLOWED_FILTERS:
+                if value:
+                    if key == "status":
+                        query = query.filter(Petition.status.in_(value))
+                    else:
+                        if value.start != None:
+                            query = query.filter(
+                                        getattr(Petition, key) >= value.start
+                                    )
+                        if value.end != None:
+                            query = query.filter(
+                                        getattr(Petition, key) <= value.end,
+                                    )
             else:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
