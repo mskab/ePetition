@@ -49,8 +49,21 @@ def get_by_id(_db: Session, decision_maker_id: int):
     return decision_maker
 
 
-def get_all(_db: Session, offset: int = 0, limit: int = 100):
-    return _db.query(DecisionMaker).offset(offset).limit(limit).all()
+def get_all(
+    _db: Session,
+    offset: int = 0,
+    limit: int = 100,
+    search_query: str = "",
+):
+    return (
+        _db.query(DecisionMaker)
+        .filter(
+            DecisionMaker.naming.contains(search_query, autoescape=True)
+        )
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
 
 
 def update(

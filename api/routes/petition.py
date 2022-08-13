@@ -38,12 +38,70 @@ def create_petition(
 
 @router.get("/", response_model=List[PetitionInfo])
 def get_all_petitions(
-    offset: int, limit: int, db: Session = default_session
+    db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
+    ordering: str = None,
+    statuses: str = None,
+    creation_date: str = None,
+    due_date: str = None,
 ):
     """
     Get all the Petitions stored in database
     """
-    return petition.get_all(db, offset, limit)
+    if ordering:
+        ordering = ordering.split(",")
+
+    if statuses:
+        statuses = statuses.split(",")
+
+    if creation_date:
+        creation_date = creation_date.split(",")
+
+    if due_date:
+        due_date = due_date.split(",")
+
+    return petition.get_all(
+        db, offset, limit, statuses, creation_date, due_date, ordering
+    )
+
+
+@router.get("/search", response_model=List[PetitionInfo])
+def search_petitions(
+    db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
+    q: str = "",
+    ordering: str = None,
+    statuses: str = None,
+    creation_date: str = None,
+    due_date: str = None,
+):
+    """
+    Search petitions by requested query
+    """
+    if ordering:
+        ordering = ordering.split(",")
+
+    if statuses:
+        statuses = statuses.split(",")
+
+    if creation_date:
+        creation_date = creation_date.split(",")
+
+    if due_date:
+        due_date = due_date.split(",")
+
+    return petition.get_all(
+        db,
+        offset,
+        limit,
+        statuses,
+        creation_date,
+        due_date,
+        ordering,
+        q,
+    )
 
 
 @router.get("/{petition_id}", response_model=PetitionInfo)
@@ -65,6 +123,7 @@ def update_petition(
     Update a Petition stored in the database
     """
     current_user = auth.get_authenteficated_user(db, Auth)
+
     if not current_user.is_admin and req_petition.status not in [
         "victory",
         "closed",
@@ -73,8 +132,7 @@ def update_petition(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Update status not allowed",
         )
-
-    return petition.update(db, petition_id, req_petition)
+    return petition.update(db, petition_id, req_petition, current_user)
 
 
 @router.delete("/{petition_id}", response_model=StatusResponse)

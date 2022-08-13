@@ -31,17 +31,38 @@ def create_user(req_user: UserCreate, db: Session = default_session):
 
 @router.get("/", response_model=List[UserInfoAllAllowedFields])
 def get_all_users(
-    offset: int,
-    limit: int,
     db: Session = default_session,
     Auth: AuthJWT = default_authJWT,
+    offset: int = 0,
+    limit: int = 100,
+    q: str = "",
+    is_active: bool = None,
+    is_admin: bool = None,
 ):
     """
     Get all the Users stored in database
     """
     auth.is_only_admin_permitted(db, Auth)
 
-    return user.get_all(db, offset, limit)
+    return user.get_all(db, offset, limit, q, is_active, is_admin)
+
+
+@router.get("/search", response_model=List[UserInfoAllAllowedFields])
+def search_user(
+    db: Session = default_session,
+    Auth: AuthJWT = default_authJWT,
+    offset: int = 0,
+    limit: int = 100,
+    q: str = "",
+    is_active: bool = None,
+    is_admin: bool = None,
+):
+    """
+    Search Users by requested query
+    """
+    auth.is_only_admin_permitted(db, Auth)
+
+    return user.get_all(db, offset, limit, q, is_active, is_admin)
 
 
 @router.get(
@@ -82,14 +103,16 @@ def update_user(
         if current_user.id != user_id:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-        if isinstance(req_user.is_active, bool) or isinstance(req_user.is_admin, bool):
+        if isinstance(req_user.is_active, bool) or isinstance(
+            req_user.is_admin, bool
+        ):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Update status not allowed",
             )
 
         req_user = UserUpdate(**req_user.__dict__)
-    elif req_user.is_admin == False:
+    elif not req_user.is_admin:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Update status not allowed",

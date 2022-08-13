@@ -3,6 +3,7 @@ from db.models.user import User
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from schemas.user import UserCreate, UserUpdateAllAllowedFields
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 
@@ -45,8 +46,28 @@ def get_by_id(_db: Session, user_id: int):
     return db_user
 
 
-def get_all(_db: Session, offset: int = 0, limit: int = 100):
-    return _db.query(User).offset(offset).limit(limit).all()
+def get_all(
+    _db: Session,
+    offset: int = 0,
+    limit: int = 100,
+    search_query: str = "",
+    is_active: bool = None,
+    is_admin: bool = None,
+):
+    query = _db.query(User).filter(
+        or_(
+            User.firstname.contains(search_query, autoescape=True),
+            User.lastname.contains(search_query, autoescape=True),
+            User.email.contains(search_query, autoescape=True),
+        )
+    )
+    if is_active is not None:
+        query = query.filter(User.is_active == is_active)
+
+    if is_admin is not None:
+        query = query.filter(User.is_admin == is_admin)
+
+    return query.offset(offset).limit(limit).all()
 
 
 def update(
@@ -70,8 +91,8 @@ def update(
 
     if update_user_encoded.get("is_active") is not None:
         db_user.is_active = update_user_encoded["is_active"]
-    
-    if update_user_encoded.get("is_admin") == True:
+
+    if update_user_encoded.get("is_admin"):
         db_user.is_admin = update_user_encoded["is_admin"]
 
     _db.commit()

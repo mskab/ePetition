@@ -35,3 +35,8 @@ class UserInfo(UserBase):
 class UserInfoAllAllowedFields(UserInfo):
     is_active: bool
     is_admin: bool
+
+
+class UserFilters(BaseModel):
+    is_active: Optional[bool]
+    is_admin: Optional[bool]

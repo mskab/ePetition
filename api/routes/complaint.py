@@ -37,17 +37,20 @@ def create_complaint(
 
 @router.get("/", response_model=List[ComplaintInfo])
 def get_all_complaints(
-    offset: int,
-    limit: int,
     db: Session = default_session,
     Auth: AuthJWT = default_authJWT,
+    limit: int = 100,
+    offset: int = 0,
+    statuses: str = None,
 ):
     """
     Get all the Complaints stored in database
     """
     auth.is_only_admin_permitted(db, Auth)
+    if statuses:
+        statuses = statuses.split(",")
 
-    return complaint.get_all(db, offset, limit)
+    return complaint.get_all(db, offset, limit, statuses)
 
 
 @router.get("/{complaint_id}", response_model=ComplaintInfo)

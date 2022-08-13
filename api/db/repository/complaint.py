@@ -1,4 +1,6 @@
-from db.models.complaint import Complaint
+from typing import List
+
+from db.models.complaint import Complaint, Status
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from schemas.complaint import ComplaintCreate, ComplaintUpdate
@@ -39,8 +41,23 @@ def get_by_id(_db: Session, complaint_id: int):
     return db_complaint
 
 
-def get_all(_db: Session, offset: int = 0, limit: int = 100):
-    return _db.query(Complaint).offset(offset).limit(limit).all()
+def get_all(
+    _db: Session,
+    offset: int = 0,
+    limit: int = 100,
+    statuses: List[str] = None,
+):
+    query = _db.query(Complaint)
+    if statuses:
+        if set(statuses) < {i.value for i in Status}:
+            query = query.filter(Complaint.status.in_(statuses))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Can not apply such filtering",
+            )
+
+    return query.offset(offset).limit(limit).all()
 
 
 def update(_db: Session, complaint_id: int, complaint: ComplaintUpdate):

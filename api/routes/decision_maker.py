@@ -37,12 +37,30 @@ def create_decision_maker(
 
 @router.get("/", response_model=List[DecisionMakerInfo])
 def get_all_decision_makers(
-    offset: int, limit: int, db: Session = default_session
+    db: Session = default_session, limit: int = 100, offset: int = 0
 ):
     """
     Get all the Decision makers stored in database
     """
     return decision_maker.get_all(db, offset, limit)
+
+
+@router.get("/search", response_model=List[DecisionMakerInfo])
+def search_decision_maker(
+    db: Session = default_session,
+    limit: int = 100,
+    offset: int = 0,
+    q: str = "",
+):
+    """
+    Search decision makers by requested query
+    """
+    return decision_maker.get_all(
+        db,
+        offset,
+        limit,
+        q,
+    )
 
 
 @router.get("/{decision_maker_id}", response_model=DecisionMakerInfo)
