@@ -49,7 +49,7 @@ def get_all(
 ):
     query = _db.query(Complaint)
     if statuses:
-        if set(statuses) <= {i.value for i in Status}:
+        if set(statuses) < {i.value for i in Status}:
             query = query.filter(Complaint.status.in_(statuses))
         else:
             raise HTTPException(

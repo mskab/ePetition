@@ -107,7 +107,7 @@ def get_all(
             )
         if due_date:
             query = __form_date_order(query, due_date, "due_date")
-    except Exception as exc:
+    except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Can not apply such filtering",
