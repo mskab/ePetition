@@ -22,8 +22,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m venv env
-          .\env\Scripts\activate
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv install
