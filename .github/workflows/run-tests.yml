@@ -38,4 +38,4 @@ jobs:
           SECRET_KEY: SECRET_KEY
           REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
         run: |
-          pytest
+          pipenv pytest
