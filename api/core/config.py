@@ -1,11 +1,17 @@
 import os
 import urllib
-from pathlib import Path
 
 from dotenv import load_dotenv
+import os
 
-env_path = Path("../") / ".env"
-load_dotenv(dotenv_path=env_path)
+
+load_dotenv(
+    dotenv_path=os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(
+                        os.path.abspath(__file__)
+                        ))), ".env"
+    )
+)
 
 
 class Settings:
@@ -29,10 +35,12 @@ class Settings:
         f"{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}?sslmode={SSL_MODE}"
     )
 
-    SECRET_KEY = os.getenv("SECRET_KEY")
+    SECRET_KEY = str(os.environ.get("SECRET_KEY"))
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     REFRESH_TOKEN_EXPIRE_DAYS = 7
+
+    TEST_EMAIL = "test_random_email@tre.com"
 
 
 settings = Settings()
