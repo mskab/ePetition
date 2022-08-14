@@ -23,5 +23,15 @@ jobs:
           pip install pipenv
           pipenv install
       - name: Unit Testing with pytest
+        env: |
+          POSTGRES_SERVER = localhost
+          POSTGRES_PORT = 5432
+          POSTGRES_DB = db
+          POSTGRES_USER = user
+          POSTGRES_PASSWORD = pasword
+          SSL_MODE = prefer
+          SECRET_KEY = SECRET_KEY
+          REFRESH_SECRET_KEY = REFRESH_SECRET_KEY
+
         run: |
           python -m pytest
