@@ -86,7 +86,7 @@ def update(
     if update_decision_maker_encoded["email"]:
         db_decision_maker.email = update_decision_maker_encoded["email"]
 
-    if update_decision_maker_encoded["is_active"] is not None:
+    if update_decision_maker_encoded["is_verified"] is not None:
         db_decision_maker.is_verified = update_decision_maker_encoded[
             "is_verified"
         ]
