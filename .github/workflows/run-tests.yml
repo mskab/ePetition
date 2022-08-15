@@ -27,9 +27,6 @@ jobs:
           REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
         run: |
           pipenv install --dev
-          pipenv run pytest
-      - name: Build coverage file
-        run: |
           pipenv run pytest --cov=api api/tests/ > pytest-coverage.txt
       - name: Comment coverage
         uses: coroo/pytest-coverage-commentator@v1.0.2
