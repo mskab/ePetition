@@ -107,9 +107,7 @@ def update_user(
         if current_user.id != user_id:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-        if isinstance(req_user.is_active, bool) or isinstance(
-            req_user.is_admin, bool
-        ):
+        if req_user.is_active or req_user.is_admin:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Update status not allowed",
