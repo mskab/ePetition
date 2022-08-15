@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+sqlalchemy = "*"
+python-dotenv = "*"
+psycopg2 = "*"
+alembic = "*"
+pydantic = {extras = ["email"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
+pre-commit = "*"
+flake8-fastapi = "*"
+black = "*"
+isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
+pylint = "*"
+fastapi-jwt-auth = "*"
+python-multipart = "*"
+pytest = "*"
+requests = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
