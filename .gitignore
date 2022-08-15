@@ -271,3 +271,4 @@ yarn-error.log*
 /htmlcov
 api/migrations/versions/*
 !api/migrations/versions/__init__.py
+test_db*

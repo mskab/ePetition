@@ -78,7 +78,11 @@ def get_user(
     Get the User with the given ID
     """
     current_user = auth.get_authenteficated_user(db, Auth)
-    db_user = user.get_by_id(db, user_id)
+    if current_user.id == user_id or current_user.is_admin:
+        db_user = user.get_by_id(db, user_id)
+    else:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
     if current_user.is_admin:
         return UserInfoAllAllowedFields(**db_user.__dict__)
 
@@ -103,16 +107,14 @@ def update_user(
         if current_user.id != user_id:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
-        if isinstance(req_user.is_active, bool) or isinstance(
-            req_user.is_admin, bool
-        ):
+        if req_user.is_active or req_user.is_admin:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Update status not allowed",
             )
 
         req_user = UserUpdate(**req_user.__dict__)
-    elif not req_user.is_admin:
+    elif not req_user.is_admin and isinstance(req_user.is_admin, bool):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Update status not allowed",

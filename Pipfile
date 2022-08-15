@@ -19,6 +19,10 @@ isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 pylint = "*"
 fastapi-jwt-auth = "*"
 python-multipart = "*"
+pytest = "*"
+requests = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

@@ -1,0 +1,32 @@
+name: Python application
+on:
+  pull_request:
+    branches:
+    - main
+    - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10.0
+      - name: Install pipenv
+        uses: dschep/install-pipenv-action@v1
+      - name: Run tests
+        env:
+          POSTGRES_SERVER: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pasword
+          SSL_MOD: prefer
+          SECRET_KEY: SECRET_KEY
+          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
+        run: |
+          pipenv install --dev
+          pipenv run pytest --cov=api api/tests/ > pytest-coverage.txt
+      - name: Comment coverage
+        uses: coroo/pytest-coverage-commentator@v1.0.2
