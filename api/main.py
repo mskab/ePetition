@@ -1,12 +1,12 @@
 # pylint: skip-file
 
-from core.config import settings
-from db.base import Base
-from db.session import engine
+from .core.config import settings
+from .db.base import Base
+from .db.session import engine
 from fastapi import FastAPI
 from fastapi_jwt_auth import AuthJWT
-from routes.base import api_router
-from schemas.jwt import TokenConfig
+from .routes.base import api_router
+from .schemas.jwt import TokenConfig
 
 
 @AuthJWT.load_config

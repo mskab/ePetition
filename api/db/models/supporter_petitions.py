@@ -1,4 +1,4 @@
-from db.base_class import Base
+from api.db.base_class import Base
 from sqlalchemy import Column, ForeignKey, Table
 
 supporter_petitions = Table(
