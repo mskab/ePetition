@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/app/
-    command: ./docker-entrypoint-local.sh
+      - .:/app
+    command: ../docker-entrypoint-local.sh
     env_file:
       - ./.env
     ports:
