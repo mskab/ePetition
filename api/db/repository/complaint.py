@@ -1,9 +1,9 @@
 from typing import List
 
-from api.db.models.complaint import Complaint, Status
+from db.models.complaint import Complaint, Status
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from api.schemas.complaint import ComplaintCreate, ComplaintUpdate
+from schemas.complaint import ComplaintCreate, ComplaintUpdate
 from sqlalchemy.orm import Session
 
 

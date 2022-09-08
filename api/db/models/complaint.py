@@ -1,6 +1,6 @@
 import enum
 
-from api.db.base_class import Base
+from db.base_class import Base
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship

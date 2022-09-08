@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.routes import auth, complaint, decision_maker, petition, user
+from routes import auth, complaint, decision_maker, petition, user
 
 api_router = APIRouter()
 api_router.include_router(user.router, prefix="/users", tags=["users"])

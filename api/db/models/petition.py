@@ -1,9 +1,9 @@
 import enum
 from datetime import datetime
 
-from api.db.base_class import Base
-from api.db.models.petition_decision_maker import petition_decision_maker
-from api.db.models.supporter_petitions import supporter_petitions
+from db.base_class import Base
+from db.models.petition_decision_maker import petition_decision_maker
+from db.models.supporter_petitions import supporter_petitions
 from sqlalchemy import (
     CheckConstraint,
     Column,

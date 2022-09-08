@@ -1,6 +1,6 @@
-from api.core.hashing import Hasher
-from api.db.models.user import User
-from api.db.repository import user
+from core.hashing import Hasher
+from db.models.user import User
+from db.repository import user
 from fastapi import HTTPException, status
 from fastapi_jwt_auth import AuthJWT
 from sqlalchemy.orm import Session

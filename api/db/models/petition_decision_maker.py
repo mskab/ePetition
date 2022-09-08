@@ -1,4 +1,4 @@
-from api.db.base_class import Base
+from db.base_class import Base
 from sqlalchemy import Column, ForeignKey, Table
 
 petition_decision_maker = Table(
