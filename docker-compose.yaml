@@ -1,0 +1,32 @@
+version: '3.10'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app/
+    command: uvicorn api.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    env_file:
+      - ./.env
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - api
+
+  db:
+    image: postgres:13-alpine
+    env_file:
+      - ./.env
+    ports:
+      - 5432:5432
+    restart: always
+    networks:
+      - api
+
+networks:
+  api:
