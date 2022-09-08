@@ -1,5 +1,4 @@
-version: '3.10'
-
+version: "3.8"
 services:
   server:
     build:
@@ -7,7 +6,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/app/
-    command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    command: ./docker-entrypoint-local.sh
     env_file:
       - ./.env
     ports:
@@ -15,6 +14,7 @@ services:
     depends_on:
       - db
     restart: always
+    working_dir: /app/api/
     networks:
       - api
 
