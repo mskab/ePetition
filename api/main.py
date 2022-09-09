@@ -1,4 +1,6 @@
 # pylint: skip-file
+import os
+os.chdir('/api')
 
 from core.config import settings
 from db.base import Base

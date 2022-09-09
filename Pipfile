@@ -8,7 +8,7 @@ fastapi = "*"
 uvicorn = "*"
 sqlalchemy = "*"
 python-dotenv = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 alembic = "*"
 pydantic = {extras = ["email"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
@@ -23,6 +23,7 @@ pytest = "*"
 requests = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
