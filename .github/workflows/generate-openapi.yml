@@ -4,14 +4,14 @@ on:
 jobs:
   generate-specification:
     runs-on: ubuntu-latest
-    run: |
-      UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
-      echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
     steps:
       - name: Checks out repo
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
+        run: |
+          UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
+          echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v2
