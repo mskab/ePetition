@@ -3,6 +3,7 @@ description: "Generates the OpenAPI specification file for a FastAPI project."
 on: 
   push
 jobs:
+  generate-specification:
     runs-on: ubuntu-latest
     run: |
       UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
