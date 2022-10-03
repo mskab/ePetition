@@ -20,10 +20,10 @@ jobs:
           pip install fastapi pyyaml
           python scripts/generate_openapi.py
 
-        - name: Generate UNIQUE_CHANGE_NAME
-          run: |
-            UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
-            echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
+      - name: Generate UNIQUE_CHANGE_NAME
+        run: |
+          UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
+          echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
 
 
       - name: Commit changes in remote repo
