@@ -1,5 +1,4 @@
 name: Generate FastAPI OpenAPI specification
-description: "Generates the OpenAPI specification file for a FastAPI project."
 on: 
   push
 jobs:
