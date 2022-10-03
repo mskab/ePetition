@@ -10,9 +10,9 @@ workspace = os.environ.get("GITHUB_WORKSPACE")
 sys.path.append(workspace)
 
 os.system("pip install pipenv --upgrade && pipenv lock")
-print(os.listdir(os.getcwd()))
+
 try:
-    mod = importlib.import_module("api.main")
+    mod = importlib.import_module(".api.main")
 except Exception as e:
     raise ModuleNotFoundError(
         f"Error importing api/main.py file."
