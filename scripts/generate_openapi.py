@@ -8,11 +8,12 @@ from fastapi.openapi.utils import get_openapi
 
 workspace = os.environ.get("GITHUB_WORKSPACE")
 sys.path.append(workspace)
+sys.path.append(os.path.abspath(os.getcwd()) + '/api')
 
 os.system("pip install pipenv --upgrade && pipenv lock")
 
 try:
-    mod = importlib.import_module(".api.main")
+    mod = importlib.import_module("api.main")
 except Exception as e:
     raise ModuleNotFoundError(
         f"Error importing api/main.py file."
