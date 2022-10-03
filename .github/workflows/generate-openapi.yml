@@ -36,7 +36,7 @@ jobs:
           create_branch: true
 
       - name: Open PR in remote repo
-        uses: vsoch/pull-request-action@main
+        uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_REQUEST_REPOSITORY: https://github.com/mskab/ePetition-docs
