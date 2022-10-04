@@ -57,14 +57,21 @@ jobs:
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
           git config --global user.name ${{ github.actor }}
           git config --global credential.helper cache
+
           git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
+
           cd ePetition-docs
           git checkout -b ${{env.UNIQUE_CHANGE_NAME}}
-          mkdir $(date +%F_%H-%M-%S)
-          cp ../openapi.yml $(date +%F_%H-%M-%S)/ -f
+          cp ../openapi.yml ./ -f
           git add .
-          git commit -m "$(date)"
-          git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
+
+          if git diff-index --quiet HEAD --; then
+            printf "No changes\n"
+          else
+            printf "Changes\n"
+            git commit -m "Automated update API spec $(date '+%Y-%m-%d')"
+            git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
+          fi
 
       - name: Open PR remote
         uses: vsoch/pull-request-action@master
@@ -74,4 +81,3 @@ jobs:
           PULL_REQUEST_BRANCH: main
           PULL_REQUEST_FROM_BRANCH: ${{env.UNIQUE_CHANGE_NAME}}
           PULL_REQUEST_TITLE: Update API docs
-          PULL_REQUEST_BODY: $(date)
