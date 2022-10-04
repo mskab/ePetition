@@ -58,7 +58,7 @@ jobs:
           target_branch: ${{env.UNIQUE_CHANGE_NAME}}
           files: openapi.yml
           remote_repository: https://github.com/mskab/ePetition-docs
-          access_token: ${{ secrets.ACCESS_TOKEN }}
+          access_token: ${{ env.ACCESS_TOKEN }}
 
       - name: Open PR remote
         uses: vsoch/pull-request-action@master
