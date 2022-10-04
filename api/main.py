@@ -4,11 +4,6 @@ import sys
 
 os.chdir(os.getcwd() + '/api')
 
-sys.path.append(os.getcwd() + "/core")
-sys.path.append(os.getcwd() + "/db")
-sys.path.append(os.getcwd() + "/routes")
-sys.path.append(os.getcwd() + "/schemas")
-
 from core.config import settings
 from db.base import Base
 from db.session import engine
