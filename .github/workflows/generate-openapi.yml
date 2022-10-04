@@ -58,9 +58,9 @@ jobs:
           git config --global user.name ${{ github.actor }}
           git config --global credential.helper cache
           git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
-          cp openapi.yml ePetition-docs/ -f
           cd ePetition-docs
           git checkout -b ${{env.UNIQUE_CHANGE_NAME}}
+          cp ../openapi.yml ePetition-docs/ -f
           git add .
           git commit -m "$(date)"
           git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
