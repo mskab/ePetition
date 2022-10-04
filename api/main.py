@@ -1,5 +1,6 @@
 # pylint: skip-file
 import os
+print("-----------------------", os.getcwd())
 os.chdir('/api')
 
 from core.config import settings
