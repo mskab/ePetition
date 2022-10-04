@@ -7,7 +7,7 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 sqlalchemy = "*"
-python-dotenv = "*"
+python3-dotenv = "*"
 psycopg2-binary = "*"
 alembic = "*"
 pydantic = {extras = ["email"], version = "*"}

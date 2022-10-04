@@ -2,7 +2,7 @@
 import os
 import sys
 
-os.chdir(os.getcwd() + '/api')
+#os.chdir(os.getcwd() + '/api')
 
 from api.core.config import settings
 from api.db.base import Base
