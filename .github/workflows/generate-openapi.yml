@@ -51,12 +51,20 @@ jobs:
           echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
 
       - name: Commit changes in remote repo
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ env.UNIQUE_CHANGE_NAME }}
+          branch: ${{ env.UNIQUE_CHANGE_NAME }}
+          repository: https://github.com/mskab/ePetition-docs
+          file_pattern: "openapi.yml"
+          create_branch: true
+      
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
           target_branch: ${{ env.UNIQUE_CHANGE_NAME }}
           files: openapi.yml
-          remote_repository: https://github.com/user2/repo1
-          access_token: https://github.com/mskab/ePetition-docs
+          remote_repository: https://github.com/mskab/ePetition-docs
+          access_token: ${{secrets.ACCESS_TOKEN}}
 
       - name: Open PR in remote repo
         uses: vsoch/pull-request-action@master
