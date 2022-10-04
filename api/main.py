@@ -1,9 +1,12 @@
 # pylint: skip-file
 import os
+import sys
 
-print("--------------------", os.chdir('/api'))
-os.chdir(os.getcwd() + '/api')
-print("-------------------", os.getcwd())
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/core")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/db")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/routes")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/schemas")
+#os.chdir(os.getcwd() + '/api')
 
 from core.config import settings
 from db.base import Base
