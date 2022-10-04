@@ -1,7 +1,7 @@
 # pylint: skip-file
 import os
-print("-----------------------", os.getcwd())
-os.chdir('/api')
+
+os.chdir(os.getcwd() + '/api')
 
 from core.config import settings
 from db.base import Base

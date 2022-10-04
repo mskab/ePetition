@@ -8,7 +8,6 @@ from fastapi.openapi.utils import get_openapi
 
 workspace = os.environ.get("GITHUB_WORKSPACE")
 sys.path.append(workspace)
-sys.path.append(os.path.abspath(os.getcwd()) + '/api')
 
 os.system("pip install pipenv --upgrade && pipenv lock")
 
