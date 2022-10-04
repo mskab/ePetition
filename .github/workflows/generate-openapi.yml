@@ -48,7 +48,7 @@ jobs:
       - name: Generate unique change name
         run: |
           UNIQUE_CHANGE_NAME="update_api_specification_$(date +%F_%H-%M-%S)"
-          echo $UNIQUE_CHANGE_NAME  >> $GITHUB_ENV
+          echo "${UNIQUE_CHANGE_NAME}"
 
       - name: Git push and commit remote
         uses: GuillaumeFalourd/git-commit-push@v1.3
