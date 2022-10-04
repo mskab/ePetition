@@ -6,6 +6,7 @@ env:
   SSL_MODE: prefer
   SECRET_KEY: SECRET_KEY
   REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
+  POSTGRES_PORT: 5432
 jobs:
   generate-specification:
     runs-on: ubuntu-latest
