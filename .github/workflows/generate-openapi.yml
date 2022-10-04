@@ -19,8 +19,8 @@ jobs:
       - name: Generate OpenAPI file
         run: |
           pipenv install --dev pyyaml
-          pipenv run uvicorn api/main:app
-          pipenv run python scripts/generate_openapi.py
+          pipenv shell
+          python scripts/generate_openapi.py
 
       - name: Generate unique change name
         run: |
