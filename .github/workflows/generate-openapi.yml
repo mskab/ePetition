@@ -17,11 +17,18 @@ jobs:
         uses: dschep/install-pipenv-action@v1
 
       - name: Generate OpenAPI file
-        uses: column-street/fastapi-openapi-specs-action@v1.0.0
-        with:
-          installDepedencies: pipenv install --dev
-          moduleDir: api
-          appName: ePetition
+        env:
+          POSTGRES_SERVER: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pasword
+          SSL_MOD: prefer
+          SECRET_KEY: SECRET_KEY
+          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
+        run: |
+          pipenv install --dev pyyaml
+          pipenv run python scripts/generate_openapi.py
 
       - name: Generate unique change name
         run: |
