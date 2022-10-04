@@ -9,8 +9,6 @@ from fastapi.openapi.utils import get_openapi
 workspace = os.environ.get("GITHUB_WORKSPACE")
 sys.path.append(workspace)
 
-os.system("pip install pipenv && pipenv install")
-
 try:
     mod = importlib.import_module("api.main")
 except Exception as e:
