@@ -16,7 +16,7 @@ jobs:
       - name: Install dependecies
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
-          command: install - d
+          command: install -d
 
       - name: Generate OpenAPI file
         run: |
