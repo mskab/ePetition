@@ -50,15 +50,15 @@ jobs:
           UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
           echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
 
-      - name: Commit changes in remote repo
+      - name: Git push and commit remote
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
-          target_branch: ${{ env.UNIQUE_CHANGE_NAME }}
+          target_branch: develop
           files: openapi.yml
           remote_repository: https://github.com/mskab/ePetition-docs
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Open PR in remote repo
+      - name: Open PR remote
         uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
