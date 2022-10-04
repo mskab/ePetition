@@ -1,15 +1,6 @@
 name: Generate FastAPI OpenAPI specification
 on: 
   push
-env:
-  POSTGRES_SERVER: localhost
-  SSL_MODE: prefer
-  SECRET_KEY: SECRET_KEY
-  REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
-  POSTGRES_PORT: 5432
-  POSTGRES_DB: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_USER: postgres
 jobs:
   generate-specification:
     runs-on: ubuntu-latest
@@ -17,10 +8,6 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_SERVER: localhost
-          SSL_MODE: prefer
-          SECRET_KEY: SECRET_KEY
-          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
           POSTGRES_PORT: 5432
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: postgres
@@ -44,12 +31,16 @@ jobs:
       - name: Install pipenv
         uses: dschep/install-pipenv-action@v1
 
-      - name: Install PostgreSQL client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
-
       - name: Generate OpenAPI file
+        env:
+          POSTGRES_SERVER: localhost
+          SSL_MODE: prefer
+          SECRET_KEY: SECRET_KEY
+          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
         run: |
           pipenv install --dev pyyaml
           pipenv run python scripts/generate_openapi.py
