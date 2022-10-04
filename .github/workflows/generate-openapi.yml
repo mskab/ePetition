@@ -69,7 +69,6 @@ jobs:
       - name: Open PR remote
         uses: vsoch/pull-request-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_REQUEST_REPOSITORY: https://github.com/mskab/ePetition-docs
           PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           PULL_REQUEST_BRANCH: main
