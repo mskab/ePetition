@@ -53,17 +53,17 @@ jobs:
       - name: Git push and commit remote
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        - run: |
-            cd lib
-            git config --global user.email "mskab2000@gmail.com"
-            git config --global user.name "mskab"
-            git config --global credential.helper cache
-            git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
-            cp index.js clonedFolder/ -f
-            cd clonedFolder
-            git add openapi.yml
-            git commit -m "$(date)"
-            git push
+        run: |
+          cd lib
+          git config --global user.email "mskab2000@gmail.com"
+          git config --global user.name "mskab"
+          git config --global credential.helper cache
+          git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
+          cp index.js clonedFolder/ -f
+          cd clonedFolder
+          git add openapi.yml
+          git commit -m "$(date)"
+          git push
 
       - name: Open PR remote
         uses: vsoch/pull-request-action@master
