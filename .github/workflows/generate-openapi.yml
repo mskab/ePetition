@@ -54,22 +54,23 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          git config --global user.email "mskab2000@gmail.com"
-          git config --global user.name "mskab"
+          git config --global user.email ${{ github.actor }}@users.noreply.github.com
+          git config --global user.name ${{ github.actor }}
           git config --global credential.helper cache
           git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
           cp openapi.yml ePetition-docs/ -f
           cd ePetition-docs
+          git checkout -b ${{env.UNIQUE_CHANGE_NAME}}
           git add .
           git commit -m "$(date)"
-          git push
+          git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
 
       - name: Open PR remote
         uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           PULL_REQUEST_REPOSITORY: https://github.com/mskab/ePetition-docs
-          PULL_REQUEST_TOKEN: ${{ secrets.PAT }}
+          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           PULL_REQUEST_BRANCH: main
           PULL_REQUEST_FROM_BRANCH: ${{env.UNIQUE_CHANGE_NAME}}
           PULL_REQUEST_TITLE: Update API docs
