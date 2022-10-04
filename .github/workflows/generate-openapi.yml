@@ -13,14 +13,21 @@ jobs:
         with:
           python-version: 3.10.0
 
-      - name: Install dependecies
-        uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: install -d
+       - name: Install pipenv
+        uses: dschep/install-pipenv-action@v1
 
       - name: Generate OpenAPI file
+        env:
+          POSTGRES_SERVER: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pasword
+          SSL_MOD: prefer
+          SECRET_KEY: SECRET_KEY
+          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
         run: |
-          pip install fastapi pyyaml
+          pipenv install --dev pyyaml
           python scripts/generate_openapi.py
 
       - name: Generate unique change name
