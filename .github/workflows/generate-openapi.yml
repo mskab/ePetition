@@ -17,6 +17,15 @@ jobs:
         uses: dschep/install-pipenv-action@v1
 
       - name: Generate OpenAPI file
+        env:
+          POSTGRES_SERVER: 127.0.0.1
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pasword
+          SSL_MODE: prefer
+          SECRET_KEY: SECRET_KEY
+          REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
         run: |
           pipenv install --dev pyyaml
           pipenv run python scripts/generate_openapi.py
