@@ -15,13 +15,12 @@ jobs:
 
       - name: Install pipenv
         uses: dschep/install-pipenv-action@v1
+        run: pipenv install --dev
 
       - name: Generate OpenAPI file
-        run: |
-          pipenv install --dev
-          python scripts/generate_openapi.py
+        run: python scripts/generate_openapi.py
 
-      - name: Generate UNIQUE_CHANGE_NAME
+      - name: Generate unique change name
         run: |
           UNIQUE_CHANGE_NAME=$(date +%F_%H-%M-%S)
           echo "UNIQUE_CHANGE_NAME=`update_api_specification_${UNIQUE_CHANGE_NAME}`" >> $GITHUB_ENV
