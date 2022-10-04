@@ -4,10 +4,10 @@ import sys
 
 os.chdir(os.getcwd() + '/api')
 
-sys.path.append(os.s.getcwd((os.path.abspath(__file__))) + "/core")
-sys.path.append(os.s.getcwd((os.path.abspath(__file__))) + "/db")
-sys.path.append(os.s.getcwd((os.path.abspath(__file__))) + "/routes")
-sys.path.append(os.s.getcwd((os.path.abspath(__file__))) + "/schemas")
+sys.path.append(os.getcwd((os.path.abspath(__file__))) + "/core")
+sys.path.append(os.getcwd((os.path.abspath(__file__))) + "/db")
+sys.path.append(os.getcwd((os.path.abspath(__file__))) + "/routes")
+sys.path.append(os.getcwd((os.path.abspath(__file__))) + "/schemas")
 #os.chdir(os.getcwd() + '/api')
 
 from core.config import settings
