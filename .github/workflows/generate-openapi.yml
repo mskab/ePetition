@@ -49,10 +49,10 @@ jobs:
         run: |
           UNIQUE_CHANGE_NAME="update_api_specification_$(date +%F_%H-%M-%S)"
           echo "UNIQUE_CHANGE_NAME=$UNIQUE_CHANGE_NAME" >> $GITHUB_ENV
-          echo $secrets
-          echo $env
 
       - name: Git push and commit remote
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
           target_branch: ${{env.UNIQUE_CHANGE_NAME}}
