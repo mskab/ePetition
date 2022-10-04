@@ -60,7 +60,8 @@ jobs:
           git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
           cd ePetition-docs
           git checkout -b ${{env.UNIQUE_CHANGE_NAME}}
-          cp ../openapi.yml ./ -f
+          mkdir $(date)
+          cp ../openapi.yml $(date)/ -f
           git add .
           git commit -m "$(date)"
           git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
