@@ -14,7 +14,7 @@ jobs:
           python-version: 3.10.0
 
       - name: Install dependecies
-        uses: VaultVulp/action - pipenv @v2 .0.1
+        uses: VaultVulp/action-pipenv@v2.0.1
         with:
           command: install - d
 
