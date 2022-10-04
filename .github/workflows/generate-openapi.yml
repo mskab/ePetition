@@ -72,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           PULL_REQUEST_REPOSITORY: https://github.com/mskab/ePetition-docs
           PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          PULL_REQUEST_BRANCH: master
+          PULL_REQUEST_BRANCH: "main"
           PULL_REQUEST_FROM_BRANCH: ${{env.UNIQUE_CHANGE_NAME}}
           PULL_REQUEST_TITLE: Update API docs
