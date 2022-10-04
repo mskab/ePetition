@@ -3,6 +3,7 @@ import os
 
 print(os.getcwd() + '/api')
 os.chdir(os.getcwd() + '/api')
+print(os.getcwd())
 
 from core.config import settings
 from db.base import Base
