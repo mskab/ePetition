@@ -19,7 +19,7 @@ jobs:
       - name: Generate OpenAPI file
         env:
           POSTGRES_SERVER: localhost
-          POSTGRES_PORT: 5432
+          POSTGRES_PORT: 5433
           POSTGRES_DB: db
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pasword
