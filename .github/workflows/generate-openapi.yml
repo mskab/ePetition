@@ -20,6 +20,7 @@ jobs:
 
       - name: Generate OpenAPI file
         run: |
+          pip install pyyaml
           python scripts/generate_openapi.py
 
       - name: Generate unique change name

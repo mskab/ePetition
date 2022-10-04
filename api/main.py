@@ -1,6 +1,5 @@
 # pylint: skip-file
 import os
-import sys
 
 os.chdir(os.getcwd() + '/api')
 

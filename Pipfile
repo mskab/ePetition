@@ -24,7 +24,6 @@ requests = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
 typing-extensions = "*"
-pyyaml = "*"
 
 [dev-packages]
 
