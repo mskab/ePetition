@@ -18,7 +18,7 @@ except Exception as e:
         f"Error: {e}"
     )
 
-app = getattr(mod, "ePetition")
+app = getattr(mod, "app")
 
 specs = get_openapi(
     title=app.title if app.title else None,
