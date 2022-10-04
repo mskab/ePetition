@@ -19,8 +19,6 @@ jobs:
       - name: Generate OpenAPI file
         run: |
           pipenv install --dev
-          pipenv install pyyaml
-          pipenv lock
           python scripts/generate_openapi.py
 
       - name: Generate UNIQUE_CHANGE_NAME
