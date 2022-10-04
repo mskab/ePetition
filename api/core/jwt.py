@@ -1,6 +1,6 @@
 import datetime
 
-from core.config import settings
+from api.core.config import settings
 from fastapi_jwt_auth import AuthJWT
 
 

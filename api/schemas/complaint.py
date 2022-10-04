@@ -1,6 +1,6 @@
 from typing import Optional
 
-from db.models.complaint import Abuse, Status
+from api.db.models.complaint import Abuse, Status
 from pydantic import BaseModel
 
 

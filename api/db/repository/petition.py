@@ -1,14 +1,14 @@
 from datetime import datetime
 from typing import List
 
-from db.models.decision_maker import DecisionMaker
-from db.models.petition import Petition
-from db.models.petition_decision_maker import petition_decision_maker
-from db.models.user import User
-from db.repository import user
+from api.db.models.decision_maker import DecisionMaker
+from api.db.models.petition import Petition
+from api.db.models.petition_decision_maker import petition_decision_maker
+from api.db.models.user import User
+from api.db.repository import user
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.petition import (
+from api.schemas.petition import (
     PetitionCreate,
     PetitionSign,
     PetitionUpdate,

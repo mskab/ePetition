@@ -1,7 +1,7 @@
-from db.models.decision_maker import DecisionMaker
+from api.db.models.decision_maker import DecisionMaker
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.decision_maker import (
+from api.schemas.decision_maker import (
     DecisionMakerCreate,
     DecisionMakerUpdate,
 )
