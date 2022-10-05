@@ -50,7 +50,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           UNIQUE_CHANGE_NAME="update/api-specification-$(date +%F_%H-%M-%S)"
-          FILE_CHANGE="false"
+          FILE_CHANGE=false
 
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
           git config --global user.name ${{ github.actor }}
@@ -64,18 +64,18 @@ jobs:
           git add .
 
           if git diff-index --quiet HEAD --; then
-            echo "No changes\n"
+            echo "No changes"
           else
-            FILE_CHANGE="true"
-            echo "Changes\n"
+            FILE_CHANGE=true
+            echo "Changes"
             git commit -m "Automated update API spec $(date +%Y-%m-%d)"
             git push -f -u origin $UNIQUE_CHANGE_NAME
           fi
           echo "PULL_REQUEST_FROM_BRANCH=$UNIQUE_CHANGE_NAME" >> $GITHUB_ENV
           echo "IS_CHANGE=$FILE_CHANGE" >> $GITHUB_ENV
 
-      - if: ${{ env.IS_CHANGE }} == "true"
-        name: Open PR remote
+      - name: Open PR remote
+        if: ${{ env.IS_CHANGE }}
         uses: vsoch/pull-request-action@master
         env:
           PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
