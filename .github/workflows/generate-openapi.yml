@@ -6,8 +6,8 @@ on:
     branches:
       - main
 jobs:
-  generate-specification:
-    if_merged:
+  if_merged:
+    generate-specification:
       if: github.event.pull_request.merged
       runs-on: ubuntu-latest
       services:
