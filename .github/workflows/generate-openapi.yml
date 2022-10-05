@@ -54,14 +54,16 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
+          export UNIQUE_CHANGE_NAME="update/api-specification-$(date +%F_%H-%M-%S)"
+
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
           git config --global user.name ${{ github.actor }}
           git config --global credential.helper cache
 
-          git clone https://${{secrets.ACCESS_TOKEN}}@github.com/mskab/ePetition-docs
+          git clone https://${ACCESS_TOKEN}@github.com/mskab/ePetition-docs
 
           cd ePetition-docs
-          git checkout -b ${{env.UNIQUE_CHANGE_NAME}}
+          git checkout -b ${UNIQUE_CHANGE_NAME}
           cp ../openapi.yml ./ -f
           git add .
 
@@ -70,14 +72,14 @@ jobs:
           else
             printf "Changes\n"
             git commit -m "Automated update API spec $(date '+%Y-%m-%d')"
-            git push -f -u origin ${{env.UNIQUE_CHANGE_NAME}}
+            git push -f -u origin ${UNIQUE_CHANGE_NAME}
           fi
+          echo "PULL_REQUEST_FROM_BRANCH=${UNIQUE_CHANGE_NAME}" >> $GITHUB_ENV
 
-      - name: Open PR remote
-        uses: vsoch/pull-request-action@master
-        env:
-          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          PULL_REQUEST_BRANCH: main
-          PULL_REQUEST_FROM_BRANCH: ${{env.UNIQUE_CHANGE_NAME}}
-          PULL_REQUEST_TITLE: Update API docs
+        if:
+          - name: Open PR remote
+            uses: vsoch/pull-request-action@master
+            env:
+              PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+              PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+              PULL_REQUEST_BRANCH: main
