@@ -76,8 +76,8 @@ jobs:
 
       - name: Open PR remote
         if: ${{ env.IS_CHANGE }} == "true"
-          uses: vsoch/pull-request-action@master
-          env:
-            PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-            PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-            PULL_REQUEST_BRANCH: main
+        uses: vsoch/pull-request-action@master
+        env:
+          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          PULL_REQUEST_BRANCH: main
