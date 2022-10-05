@@ -22,7 +22,7 @@ jobs:
           POSTGRES_DB: db
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pasword
-          SSL_MOD: prefer
+          SSL_MODE: prefer
           SECRET_KEY: SECRET_KEY
           REFRESH_SECRET_KEY: REFRESH_SECRET_KEY
         run: |

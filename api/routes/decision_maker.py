@@ -1,11 +1,11 @@
 from typing import List
 
-from db.repository import auth, decision_maker
-from db.session import get_db
+from api.db.repository import auth, decision_maker
+from api.db.session import get_db
 from fastapi import APIRouter, Depends, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import StatusResponse
-from schemas.decision_maker import (
+from api.schemas.common import StatusResponse
+from api.schemas.decision_maker import (
     DecisionMakerCreate,
     DecisionMakerInfo,
     DecisionMakerUpdate,

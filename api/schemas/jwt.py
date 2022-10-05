@@ -1,4 +1,4 @@
-from core.config import settings
+from api.core.config import settings
 from pydantic import BaseModel
 
 

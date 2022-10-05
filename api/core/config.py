@@ -2,7 +2,6 @@ import os
 import urllib
 
 from dotenv import load_dotenv
-import os
 
 
 load_dotenv(
@@ -16,7 +15,7 @@ load_dotenv(
 
 class Settings:
     PROJECT_NAME: str = "ePetition"
-    PROJECT_VERSION: str = "1.0.0"
+    PROJECT_VERSION: str = "1.0.1"
 
     POSTGRES_SERVER: str = os.environ.get("POSTGRES_SERVER")
     POSTGRES_PORT: str = urllib.parse.quote_plus(

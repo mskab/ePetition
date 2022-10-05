@@ -1,11 +1,11 @@
 from typing import List
 
-from db.repository import auth, petition
-from db.session import get_db
+from api.db.repository import auth, petition
+from api.db.session import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_jwt_auth import AuthJWT
-from schemas.common import StatusResponse
-from schemas.petition import (
+from api.schemas.common import StatusResponse
+from api.schemas.petition import (
     PetitionCreate,
     PetitionInfo,
     PetitionSign,

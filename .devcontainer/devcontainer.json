@@ -1,0 +1,13 @@
+{
+	"name": "API Container",
+	"dockerComposeFile": "../docker-compose.yaml",
+	"service": "server",
+	"workspaceFolder": "/app",
+	"settings": { 
+		"python.defaultInterpreterPath": "/opt/venv/bin/python"
+	},
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	]
+}
