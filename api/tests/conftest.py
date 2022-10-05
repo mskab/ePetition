@@ -1,3 +1,5 @@
+import os
+print("--------------------------------------------------",os.getcwd())
 from typing import Any
 from typing import Generator
 
@@ -10,7 +12,6 @@ from utils.constants import USER_TEST_DATA
 from utils.users import authentication_token_from_email, register_admin_to_db
 
 import sys
-import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
