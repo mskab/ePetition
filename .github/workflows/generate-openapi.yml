@@ -79,5 +79,5 @@ jobs:
           PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
           PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           PULL_REQUEST_BRANCH: main
-        if: ${{ env.IS_CHANGE == "true" }}
+        if: env.IS_CHANGE == "true"
         uses: vsoch/pull-request-action@master
