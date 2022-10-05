@@ -2,10 +2,10 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from db.models.user import User
-from db.repository.user import create, get_by_email
-from core.hashing import Hasher
-from schemas.user import UserCreate
+from api.db.models.user import User
+from api.db.repository.user import create, get_by_email
+from api.core.hashing import Hasher
+from api.schemas.user import UserCreate
 
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
