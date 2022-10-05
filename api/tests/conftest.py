@@ -1,12 +1,6 @@
 from typing import Any
 from typing import Generator
 
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print("2---------------------",os.getcwd())
-
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -15,12 +9,16 @@ from sqlalchemy.orm import sessionmaker, Session
 from utils.constants import USER_TEST_DATA
 from utils.users import authentication_token_from_email, register_admin_to_db
 
+import sys
+import os
 
-from db.base import Base
-from db.session import get_db
-from routes.base import api_router
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from api.db.base import Base
+from api.db.session import get_db
+from api.routes.base import api_router
 from fastapi_jwt_auth import AuthJWT
-from schemas.jwt import TokenConfig
+from api.schemas.jwt import TokenConfig
 
 
 @AuthJWT.load_config
