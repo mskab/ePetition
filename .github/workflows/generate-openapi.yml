@@ -49,35 +49,35 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          export UNIQUE_CHANGE_NAME="update/api-specification-$(date +%F_%H-%M-%S)"
+          UNIQUE_CHANGE_NAME="update/api-specification-$(date +%F_%H-%M-%S)"
+          FILE_CHANGE="false"
 
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
           git config --global user.name ${{ github.actor }}
           git config --global credential.helper cache
 
-          git clone https://${ACCESS_TOKEN}@github.com/mskab/ePetition-docs
+          git clone https://$ACCESS_TOKEN@github.com/mskab/ePetition-docs
 
           cd ePetition-docs
-          git checkout -b ${UNIQUE_CHANGE_NAME}
+          git checkout -b $UNIQUE_CHANGE_NAME
           cp ../openapi.yml ./ -f
           git add .
 
           if git diff-index --quiet HEAD --; then
-            export FILE_CHANGE= "false"
-            printf "No changes\n"
+            echo "No changes\n"
           else
-            export FILE_CHANGE= "true"
-            printf "Changes\n"
+            FILE_CHANGE="true"
+            echo "Changes\n"
             git commit -m "Automated update API spec $(date +%Y-%m-%d)"
-            git push -f -u origin ${UNIQUE_CHANGE_NAME}
+            git push -f -u origin $UNIQUE_CHANGE_NAME
           fi
-          echo "PULL_REQUEST_FROM_BRANCH=${UNIQUE_CHANGE_NAME}" >> $GITHUB_ENV
-          echo "IS_CHANGE=${FILE_CHANGE}" >> $GITHUB_ENV
+          echo "PULL_REQUEST_FROM_BRANCH=$UNIQUE_CHANGE_NAME" >> $GITHUB_ENV
+          echo "IS_CHANGE=$FILE_CHANGE" >> $GITHUB_ENV
 
-        - if: ${{ env.IS_CHANGE }} == "true"
-          name: Open PR remote
-          uses: vsoch/pull-request-action@master
-          env:
-            PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-            PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-            PULL_REQUEST_BRANCH: main
+      - if: ${{ env.IS_CHANGE }} == "true"
+        name: Open PR remote
+        uses: vsoch/pull-request-action@master
+        env:
+          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          PULL_REQUEST_BRANCH: main
