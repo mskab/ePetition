@@ -1,12 +1,13 @@
 name: Generate FastAPI OpenAPI specification
 on: 
   pull_request:
-    branches: 
+    types:
+      - closed
+    branches:
       - main
-    types: [closed]
 jobs:
   generate-specification:
-    if: ${{ github.event.pull_request.merged }}
+    if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     services:
       postgres:
