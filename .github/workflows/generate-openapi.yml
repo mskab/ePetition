@@ -76,10 +76,9 @@ jobs:
           fi
           echo "PULL_REQUEST_FROM_BRANCH=${UNIQUE_CHANGE_NAME}" >> $GITHUB_ENV
 
-        if:
-          - name: Open PR remote
-            uses: vsoch/pull-request-action@master
-            env:
-              PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-              PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-              PULL_REQUEST_BRANCH: main
+      - name: Open PR remote
+        uses: vsoch/pull-request-action@master
+        env:
+          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          PULL_REQUEST_BRANCH: main
