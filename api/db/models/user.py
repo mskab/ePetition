@@ -1,5 +1,5 @@
-from db.base_class import Base
-from db.models.supporter_petitions import supporter_petitions
+from api.db.base_class import Base
+from api.db.models.supporter_petitions import supporter_petitions
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
 

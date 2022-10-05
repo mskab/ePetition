@@ -1,10 +1,10 @@
-from core import jwt
-from db.repository import auth
-from db.session import get_db
+from api.core import jwt
+from api.db.repository import auth
+from api.db.session import get_db
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_jwt_auth import AuthJWT
-from schemas.jwt import TokenLogin, TokenRefresh
+from api.schemas.jwt import TokenLogin, TokenRefresh
 from sqlalchemy.orm import Session
 
 router = APIRouter()

@@ -1,8 +1,8 @@
-from core.hashing import Hasher
-from db.models.user import User
+from api.core.hashing import Hasher
+from api.db.models.user import User
 from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
-from schemas.user import UserCreate, UserUpdateAllAllowedFields
+from api.schemas.user import UserCreate, UserUpdateAllAllowedFields
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 

@@ -1,14 +1,15 @@
 # pylint: skip-file
 import os
-os.chdir('/api')
 
-from core.config import settings
-from db.base import Base
-from db.session import engine
+#os.chdir(os.getcwd() + '/api')
+
+from api.core.config import settings
+from api.db.base import Base
+from api.db.session import engine
 from fastapi import FastAPI
 from fastapi_jwt_auth import AuthJWT
-from routes.base import api_router
-from schemas.jwt import TokenConfig
+from api.routes.base import api_router
+from api.schemas.jwt import TokenConfig
 
 
 @AuthJWT.load_config
