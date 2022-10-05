@@ -1,4 +1,6 @@
 import os
+os.chdir(os.path.dirname(os.getcwd()))
+
 from typing import Any
 from typing import Generator
 
@@ -13,7 +15,6 @@ from utils.users import authentication_token_from_email, register_admin_to_db
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.chdir(os.path.dirname(os.getcwd()))
 
 from api.db.base import Base
 from api.db.session import get_db
