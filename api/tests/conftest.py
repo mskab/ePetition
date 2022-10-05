@@ -1,20 +1,20 @@
 from typing import Any
 from typing import Generator
 
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("2---------------------",os.getcwd())
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-import os
-print("1---------------------",os.getcwd())
 from sqlalchemy.orm import sessionmaker, Session
 from utils.constants import USER_TEST_DATA
 from utils.users import authentication_token_from_email, register_admin_to_db
 
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print("2---------------------",os.getcwd())
 
 from db.base import Base
 from db.session import get_db
@@ -27,7 +27,7 @@ from schemas.jwt import TokenConfig
 def get_config():
     return TokenConfig()
 
-print("3---------------------",os.getcwd())
+
 def start_application():
     app = FastAPI()
     app.include_router(api_router)
