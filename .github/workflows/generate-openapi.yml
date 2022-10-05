@@ -45,11 +45,6 @@ jobs:
           pipenv install --dev pyyaml
           pipenv run python scripts/generate_openapi.py
 
-      - name: Generate unique change name
-        run: |
-          UNIQUE_CHANGE_NAME="update_api_specification_$(date +%F_%H-%M-%S)"
-          echo "UNIQUE_CHANGE_NAME=$UNIQUE_CHANGE_NAME" >> $GITHUB_ENV
-
       - name: Git push and commit remote
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -68,17 +63,21 @@ jobs:
           git add .
 
           if git diff-index --quiet HEAD --; then
+            export FILE_CHANGE= "false"
             printf "No changes\n"
           else
+            export FILE_CHANGE= "true"
             printf "Changes\n"
-            git commit -m "Automated update API spec $(date '+%Y-%m-%d')"
+            git commit -m "Automated update API spec $(date +%Y-%m-%d)"
             git push -f -u origin ${UNIQUE_CHANGE_NAME}
           fi
           echo "PULL_REQUEST_FROM_BRANCH=${UNIQUE_CHANGE_NAME}" >> $GITHUB_ENV
+          echo "IS_CHANGE=${FILE_CHANGE}" >> $GITHUB_ENV
 
       - name: Open PR remote
-        uses: vsoch/pull-request-action@master
-        env:
-          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          PULL_REQUEST_BRANCH: main
+        if: ${{ env.IS_CHANGE }} == "true"
+          uses: vsoch/pull-request-action@master
+          env:
+            PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+            PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            PULL_REQUEST_BRANCH: main
