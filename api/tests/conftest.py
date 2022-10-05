@@ -12,6 +12,7 @@ from utils.users import authentication_token_from_email, register_admin_to_db
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(os.getcwd())
 
 from db.base import Base
 from db.session import get_db
