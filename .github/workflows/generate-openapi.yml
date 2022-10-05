@@ -74,10 +74,10 @@ jobs:
           echo "PULL_REQUEST_FROM_BRANCH=${UNIQUE_CHANGE_NAME}" >> $GITHUB_ENV
           echo "IS_CHANGE=${FILE_CHANGE}" >> $GITHUB_ENV
 
-      - name: Open PR remote
-        if: ${{ env.IS_CHANGE }} == "true"
-        uses: vsoch/pull-request-action@master
-        env:
-          PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
-          PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          PULL_REQUEST_BRANCH: main
+        - if: ${{ env.IS_CHANGE }} == "true"
+          name: Open PR remote
+          uses: vsoch/pull-request-action@master
+          env:
+            PULL_REQUEST_REPOSITORY: mskab/ePetition-docs
+            PULL_REQUEST_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            PULL_REQUEST_BRANCH: main
